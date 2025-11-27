@@ -83,12 +83,13 @@ namespace Akatsuki.Loader
                         Console.WriteLine($"Waiting for osu!... ({num})");
                         if (num >= 50)
                         {
-                            Console.WriteLine($"Failed to patch the osu! client because the wait took too long.");
+                            Console.WriteLine($"Failed to patch the osu! client because the wait to verify loaded resources took too long.");
+                            if (!process.HasExited) process?.Kill();
                             //MessageBox.Show("Failed loading Akatsuki Patcher.\nPlease make sure you're running the latest osu! or relocate/repair your osu! install.");
                             return false;
                         }
                         Thread.Sleep(100);
-                        if (process == null || process.HasExited)
+                        if (process.HasExited)
                         {
                             Console.WriteLine($"Failed to patch the osu! client because it has unexpectedly closed.");
                             return false;
@@ -127,7 +128,7 @@ namespace Akatsuki.Loader
 
                 Program.main.Invoke((MethodInvoker)delegate
                 {
-                    Program.main.TitleText.Text = "Patching failed...";
+                    Program.main.TitleText.Text = $"Patching failed... ({i + 1})";
                     Program.main.TitleText.ForeColor = Color.DarkGray;
                 });
 

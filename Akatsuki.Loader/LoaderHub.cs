@@ -186,11 +186,11 @@ namespace Akatsuki.Loader
             {
             }
 
-            Console.WriteLine("Downloading patch...");
+            Console.WriteLine("Preparing patch...");
 
             Program.main.Invoke((MethodInvoker)delegate
             {
-                Program.main.TitleText.Text = "Downloading patch...";
+                Program.main.TitleText.Text = "Preparing patch...";
                 Program.main.TitleText.ForeColor = Color.Gray;
             });
 
@@ -211,54 +211,82 @@ namespace Akatsuki.Loader
 
             using (HttpClient client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = true }))
             {
-                //DateTimeOffset? LastModifiedWhen = null;
-                //var RequestMethod = new HttpRequestMessage(HttpMethod.Get, URL);
-                //var cacheResponse = client.SendAsync(RequestMethod, HttpCompletionOption.ResponseHeadersRead).Result;
-                
-                //if (!cacheResponse.IsSuccessStatusCode)
-                //{
-                //    Console.WriteLine($"HEAD request possibly unsuccessful. {cacheResponse.StatusCode}");
-                //}
-
                 string fullPath = null;
                 string tempPath = Path.GetTempPath() + "paplubun";
-                Console.WriteLine("Creating temp path for data...");
+
+                Console.WriteLine($"Creating temp path for data... {tempPath}");
                 Directory.CreateDirectory(tempPath);
 
-                ////Console.WriteLine(headResponse.Content.Read);
-                //LastModifiedWhen = cacheResponse.Content.Headers.LastModified;
-                //if (LastModifiedWhen.HasValue)
-                //{
-                //    string pathFromRemote = Injector.fileNamePattern + LastModifiedWhen.Value.ToString("yyyy-MM-dd");
-                //    fullPath = $"{tempPath}\\{pathFromRemote}";
-
-                //    if (File.Exists(fullPath))
-                //    {
-                //        Console.WriteLine($"Found cached data at {fullPath}.");
-                //        return (null, fullPath);
-                //    }
-                //}
-
-                //if (string.IsNullOrWhiteSpace(fullPath))
                 fullPath = $"{tempPath}\\{Injector.fileNamePattern}";
+                Console.WriteLine($"Full path is: {fullPath}");
+
+                void Download()
+                {
+                    Console.WriteLine("Downloading...");
+
+                    Program.main.Invoke((MethodInvoker)delegate
+                    {
+                        Program.main.TitleText.Text = "Downloading patch...";
+                        Program.main.TitleText.ForeColor = Color.Gray;
+                    });
+
+                    var byteResponse = client.GetByteArrayAsync(URL).Result;
+                    File.WriteAllBytes(fullPath, byteResponse);
+                    Settings.Default.LastServerPull = DateTime.UtcNow;
+                    Settings.Default.KnownTrickery = _Trickery.Learn(byteResponse);
+                    Settings.Default.Save();
+                }
 
                 if (!File.Exists(fullPath))
                 {
-                    if (Settings.Default.LastServerPull != null)
+                    Download();
+                }
+
+                try
+                {
+                    byte[] bytes = File.ReadAllBytes(fullPath);
+                    string tricks = _Trickery.Learn(bytes);
+
+                    if (tricks != Settings.Default.KnownTrickery)
                     {
-                        TimeSpan diff = DateTime.UtcNow - Settings.Default.LastServerPull;
-                        if (diff.TotalDays > 3)
+                        Console.WriteLine($"Cache mismatch, the file will be deleted. ({tricks} != {Settings.Default.KnownTrickery})");
+
+                        Program.main.Invoke((MethodInvoker)delegate
                         {
-                            Settings.Default.LastServerPull = DateTime.UtcNow;
-                            Console.WriteLine("Downloading...");
-                            var byteResponse = client.GetByteArrayAsync(URL).Result;
-                            File.WriteAllBytes(fullPath, byteResponse);
-                            return (data, null);
-                        }
+                            Program.main.TitleText.Text = "Cache mismatch...";
+                            Program.main.TitleText.ForeColor = Color.Gray;
+                        });
+
+                        File.Delete(fullPath);
+
+                        Download();
+                        return (data, null);
                     }
+                }
+                catch (Exception)
+                {
+                }
+
+                if (Settings.Default.LastServerPull != null)
+                {
+                    TimeSpan diff = DateTime.UtcNow - Settings.Default.LastServerPull;
+                    if (diff.TotalDays > 3)
+                    {
+                        Download();
+                    }
+                }
+                else
+                {
+                    Download();
                 }
 
                 Console.WriteLine("Using cache.");
+
+                Program.main.Invoke((MethodInvoker)delegate
+                {
+                    Program.main.TitleText.Text = "Using cached patch...";
+                    Program.main.TitleText.ForeColor = Color.Gray;
+                });
 
                 return (null, fullPath);
             }

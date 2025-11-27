@@ -32,7 +32,7 @@ namespace Akatsuki.Loader
             {
                 try
                 {
-                    Thread.Sleep(250);
+                    Thread.Sleep(50);
                     if (Program.main == null)
                     {
                         continue;

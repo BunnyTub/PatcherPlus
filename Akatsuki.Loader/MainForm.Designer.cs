@@ -35,15 +35,15 @@
             this.FadeOut = new System.Windows.Forms.Timer(this.components);
             this.OsuLocationText = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ShowPathBox = new System.Windows.Forms.CheckBox();
             this.AutoPatchBox = new System.Windows.Forms.CheckBox();
             this.ChangeButton = new System.Windows.Forms.Button();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
             this.AutoPatch = new System.Windows.Forms.Timer(this.components);
             this.CheckButton = new System.Windows.Forms.Timer(this.components);
-            this.ShowPathBox = new System.Windows.Forms.CheckBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.LogoBox = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayButton
@@ -98,10 +98,10 @@
             this.OsuLocationText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OsuLocationText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.OsuLocationText.ForeColor = System.Drawing.Color.Orange;
-            this.OsuLocationText.Location = new System.Drawing.Point(9, 228);
+            this.OsuLocationText.Location = new System.Drawing.Point(9, 39);
             this.OsuLocationText.Margin = new System.Windows.Forms.Padding(0);
             this.OsuLocationText.Name = "OsuLocationText";
-            this.OsuLocationText.Size = new System.Drawing.Size(435, 47);
+            this.OsuLocationText.Size = new System.Drawing.Size(435, 44);
             this.OsuLocationText.TabIndex = 3;
             this.OsuLocationText.Text = "Searching for osu!...";
             this.OsuLocationText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -114,11 +114,24 @@
             this.panel1.Controls.Add(this.ChangeButton);
             this.panel1.Controls.Add(this.PlayButton);
             this.panel1.Controls.Add(this.BackgroundProgressBar);
+            this.panel1.Controls.Add(this.OsuLocationText);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 192);
+            this.panel1.Location = new System.Drawing.Point(0, 217);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(594, 95);
             this.panel1.TabIndex = 4;
+            // 
+            // ShowPathBox
+            // 
+            this.ShowPathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ShowPathBox.AutoSize = true;
+            this.ShowPathBox.Location = new System.Drawing.Point(149, 13);
+            this.ShowPathBox.Name = "ShowPathBox";
+            this.ShowPathBox.Size = new System.Drawing.Size(106, 19);
+            this.ShowPathBox.TabIndex = 7;
+            this.ShowPathBox.Text = "Show file paths";
+            this.ShowPathBox.UseVisualStyleBackColor = true;
+            this.ShowPathBox.CheckedChanged += new System.EventHandler(this.ShowPathBox_CheckedChanged);
             // 
             // AutoPatchBox
             // 
@@ -166,36 +179,23 @@
             this.CheckButton.Enabled = true;
             this.CheckButton.Tick += new System.EventHandler(this.CheckButton_Tick);
             // 
-            // ShowPathBox
+            // LogoBox
             // 
-            this.ShowPathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ShowPathBox.AutoSize = true;
-            this.ShowPathBox.Location = new System.Drawing.Point(149, 13);
-            this.ShowPathBox.Name = "ShowPathBox";
-            this.ShowPathBox.Size = new System.Drawing.Size(106, 19);
-            this.ShowPathBox.TabIndex = 7;
-            this.ShowPathBox.Text = "Show file paths";
-            this.ShowPathBox.UseVisualStyleBackColor = true;
-            this.ShowPathBox.CheckedChanged += new System.EventHandler(this.ShowPathBox_CheckedChanged);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Akatsuki.Loader.Properties.Resources.AkatsukiLogoLowRes;
-            this.pictureBox1.Location = new System.Drawing.Point(447, 77);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(135, 109);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
+            this.LogoBox.Image = global::Akatsuki.Loader.Properties.Resources.AkatsukiLogoLowRes;
+            this.LogoBox.Location = new System.Drawing.Point(447, 77);
+            this.LogoBox.Name = "LogoBox";
+            this.LogoBox.Size = new System.Drawing.Size(135, 109);
+            this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.LogoBox.TabIndex = 5;
+            this.LogoBox.TabStop = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(594, 287);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.OsuLocationText);
+            this.ClientSize = new System.Drawing.Size(594, 312);
+            this.Controls.Add(this.LogoBox);
             this.Controls.Add(this.TitleText);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
@@ -212,7 +212,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -225,7 +225,7 @@
         public System.Windows.Forms.ProgressBar BackgroundProgressBar;
         private System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.Button ChangeButton;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox LogoBox;
         private System.Windows.Forms.OpenFileDialog OpenOsuExeFileWindow;
         private System.Windows.Forms.Timer AutoPatch;
         private System.Windows.Forms.CheckBox AutoPatchBox;

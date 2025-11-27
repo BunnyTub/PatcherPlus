@@ -7,6 +7,8 @@ namespace Akatsuki.Loader
 {
     internal static class Program
     {
+        // we love popplio
+
         public static string OsuExecutablePath = string.Empty;
         public static MainForm main;
         public static bool Closing = false;

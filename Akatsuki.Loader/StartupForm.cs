@@ -162,6 +162,7 @@ namespace Akatsuki.Loader
 
         private void StartupForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            BringItUpFurther.Stop();
             e.Cancel = !AllowClose;
             if (!AllowClose) FadeOutAnimation.Enabled = true;
         }

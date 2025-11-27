@@ -58,5 +58,31 @@ namespace Akatsuki.Loader.Properties {
                 this["ShowPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string KnownTrickery {
+            get {
+                return ((string)(this["KnownTrickery"]));
+            }
+            set {
+                this["KnownTrickery"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BySettingThisToTrueIRiskGettingBannedFromBanchoAndDevsAreNotResponsibleForYourActions {
+            get {
+                return ((bool)(this["BySettingThisToTrueIRiskGettingBannedFromBanchoAndDevsAreNotResponsibleForYourAct" +
+                    "ions"]));
+            }
+            set {
+                this["BySettingThisToTrueIRiskGettingBannedFromBanchoAndDevsAreNotResponsibleForYourAct" +
+                    "ions"] = value;
+            }
+        }
     }
 }

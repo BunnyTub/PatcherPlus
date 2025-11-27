@@ -44,6 +44,11 @@ namespace Akatsuki.Loader
                     Program.OsuExecutablePath = text;
                     FoundOsuAt(text);
                 }
+                else
+                {
+                    PlayButton.Enabled = true;
+                    PlayButton.Visible = true;
+                }
             }
 
             AutoPatchBox.Checked = Settings.Default.AutoPatch;
@@ -51,11 +56,13 @@ namespace Akatsuki.Loader
             IgnoreChanges = false;
         }
 
+        private bool StartedWithAutoPatching = false;
+
         private void PlayButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(Program.OsuExecutablePath))
             {
-                MessageBox.Show("Could not find osu! on your system. Try opening the game, or click the \"Change\" button to browse to the executable.");
+                MessageBox.Show("Could not find osu! on your system. Try opening the game, or click the \"Change\" button to browse to the executable.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -63,6 +70,11 @@ namespace Akatsuki.Loader
             PlayButton.Visible = false;
             TitleText.Text = "Launching...";
             TitleText.ForeColor = Color.Gray;
+            if (StartedWithAutoPatching)
+            {
+                Size = new Size(Size.Width, 98);
+                CenterToScreen();
+            }
             //LoaderHub.PatcherRequest(releaseStreams.SelectedValue).Wait();
             new Thread(() => LoaderHub.PatcherRequest("stable")).Start();
             //PlayLoading();
@@ -74,6 +86,12 @@ namespace Akatsuki.Loader
             TitleText.ForeColor = Color.Red;
             PlayButton.Enabled = true;
             PlayButton.Visible = true;
+            MessageBox.Show("Looks like osu! couldn't be patched properly. Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            if (StartedWithAutoPatching)
+            {
+                Close();
+            }
         }
 
         //public void Failure()
@@ -124,7 +142,15 @@ namespace Akatsuki.Loader
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            BackgroundThreads.Stop();
+            if (LoaderHub.PatchingInProgress)
+            {
+                Console.Beep();
+                e.Cancel = true;
+            }
+            else
+            {
+                BackgroundThreads.Stop();
+            }
         }
 
         private void ChangeButton_Click(object sender, EventArgs e)
@@ -149,7 +175,15 @@ namespace Akatsuki.Loader
         private void AutoPatch_Tick(object sender, EventArgs e)
         {
             AutoPatch.Stop();
-            if (!IsShiftDown()) if (Settings.Default.AutoPatch) PlayButton.PerformClick();
+            if (!IsShiftDown())
+            {
+                if (Settings.Default.AutoPatch)
+                {
+                    StartedWithAutoPatching = true;
+                    PlayButton.PerformClick();
+                }
+
+            }
         }
 
         private bool IgnoreChanges = true;
@@ -167,8 +201,12 @@ namespace Akatsuki.Loader
 
         private void CheckButton_Tick(object sender, EventArgs e)
         {
-            if (PlayButton.Visible && PlayButton.Enabled) ChangeButton.Visible = true;
-            else ChangeButton.Visible = false;
+            bool Visibility = PlayButton.Visible && PlayButton.Enabled;
+
+            ChangeButton.Visible = Visibility;
+            AutoPatchBox.Visible = Visibility;
+            ShowPathBox.Visible = Visibility;
+            OsuLocationText.Visible = Visibility;
         }
 
         private void ShowPathBox_CheckedChanged(object sender, EventArgs e)
