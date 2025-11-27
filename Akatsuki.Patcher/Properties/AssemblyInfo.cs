@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PatcherPlus")]
-[assembly: AssemblyDescription("An extended version of Akatsuki Patcher for osu!.")]
+[assembly: AssemblyTitle("Akatsuki.Patcher")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PatcherPlus")]
-[assembly: AssemblyCopyright("BunnyTub")]
+[assembly: AssemblyProduct("Akatsuki.Patcher")]
+[assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("060c01ee-6621-424e-9d7b-4c1dc8c009c9")]
+[assembly: Guid("e55423fc-5056-4af4-8149-727c6a6a4bf5")]
 
 // Version information for an assembly consists of the following four values:
 //

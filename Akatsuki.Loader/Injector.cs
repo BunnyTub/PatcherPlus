@@ -1,20 +1,18 @@
-﻿// Akatsuki.Loader, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// Akatsuki.Loader.Injector
-using HoLLy.ManagedInjector;
+﻿using HoLLy.ManagedInjector;
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace Akatsuki.Loader
 {
     public static class Injector
     {
-        //private const string fileNamePattern = "flAmEWaShEre.tmp";
+        internal const string fileNamePattern = "WaRcHeStSaUcE";
 
         private static readonly Random Random = new Random();
 
@@ -25,7 +23,7 @@ namespace Akatsuki.Loader
 
         public static void CleanupPatchers()
         {
-            foreach (string item in Directory.EnumerateFiles(Path.GetTempPath(), "flAmEWaShEre.tmp"))
+            foreach (string item in Directory.EnumerateFiles(Path.GetTempPath(), fileNamePattern))
             {
                 try
                 {
@@ -38,50 +36,105 @@ namespace Akatsuki.Loader
         }
 
         // can return null, but Framework doesn't support nullable return types
-        private static ProcessModule getAuth(int processId)
+        private static ProcessModule getAuth(Process process)
         {
-            return (Process.GetProcessById(processId)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
+            if (process.HasExited) Console.WriteLine("osu! exited...?");
+            return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
         }
 
-        public static bool Inject(string osuPath, byte[] patcherBytes)
+        public static bool Inject(string osuPath, byte[] patcherBytes, string filename)
         {
-            //IL_0083: Unknown result type (might be due to invalid IL or missing references)
-            //IL_0089: Expected O, but got Unknown
-            string tempPath = Path.GetTempPath();
-            string path = GenerateRandomString("flAmEWaShEre.tmp");
-            string text = Path.Combine(tempPath, path);
-            File.WriteAllBytes(text, patcherBytes);
-            //Process process = Process.Start(osuPath, new string[2] { "-devserver", "akatsuki.gg" });
-            Process process = Process.Start(osuPath, "-devserver akatsuki.gg");
-            int num = 0;
-            while (getAuth(process.Id) == null)
+            bool InjectNow()
             {
-                if (num == 10)
+                Console.WriteLine("Applying patch...");
+                if (patcherBytes != null) Console.WriteLine("Using bytes.");
+                else if (!string.IsNullOrWhiteSpace(filename)) Console.WriteLine("Using filename.");
+
+                Program.main.Invoke((MethodInvoker)delegate
                 {
-                    MessageBox.Show("Failed loading Akatsuki Patcher.\nPlease make sure you're running the latest osu! or relocate/repair your osu! install.");
-                    return false;
-                }
-                Thread.Sleep(200);
-                if (process == null || process.HasExited)
+                    Program.main.TitleText.Text = "Applying patch...";
+                    Program.main.TitleText.ForeColor = Color.Gray;
+                });
+
+                string fullPath = "";
+
+                string tempPath = Path.GetTempPath() + "paplubun";
+                Console.WriteLine("Creating temp path for data...");
+                Directory.CreateDirectory(tempPath);
+                string path = fileNamePattern;
+                fullPath = $"{tempPath}\\{path}";
+
+                if (!string.IsNullOrWhiteSpace(filename)) fullPath = filename;
+                else if (patcherBytes != null)
                 {
-                    return false;
+                    Console.WriteLine($"Writing data to temp path at {fullPath}...");
+                    File.WriteAllBytes(fullPath, patcherBytes);
                 }
-                num++;
-            }
-            InjectableProcess val = new InjectableProcess((uint)process.Id);
-            while (true)
-            {
+
                 try
                 {
-                    val.Inject(text, "Akatsuki.Patcher.Main", "Initialize");
+                    Console.WriteLine($"Starting osu!... {osuPath}");
+                    Process process = Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = osuPath, Arguments = "-devserver akatsuki.gg" });
+                    
+                    int num = 0;
+
+                    while (getAuth(process) == null)
+                    {
+                        Console.WriteLine($"Waiting for osu!... ({num})");
+                        if (num >= 50)
+                        {
+                            Console.WriteLine($"Failed to patch the osu! client because the wait took too long.");
+                            //MessageBox.Show("Failed loading Akatsuki Patcher.\nPlease make sure you're running the latest osu! or relocate/repair your osu! install.");
+                            return false;
+                        }
+                        Thread.Sleep(100);
+                        if (process == null || process.HasExited)
+                        {
+                            Console.WriteLine($"Failed to patch the osu! client because it has unexpectedly closed.");
+                            return false;
+                        }
+                        num++;
+                    }
+
+                    InjectableProcess val = new InjectableProcess((uint)process.Id);
+
+                    while (true)
+                    {
+                        try
+                        {
+                            val.Inject(fullPath, "Akatsuki.Patcher.Main", "Initialize");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            continue;
+                        }
+                        break;
+                    }
+
+                    return true;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    continue;
+                    Console.WriteLine(ex.Message);
+                    return false;
                 }
-                break;
             }
-            return true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (InjectNow()) return true;
+
+                Program.main.Invoke((MethodInvoker)delegate
+                {
+                    Program.main.TitleText.Text = "Patching failed...";
+                    Program.main.TitleText.ForeColor = Color.DarkGray;
+                });
+
+                Thread.Sleep(1000);
+            }
+
+            return false;
         }
     }
 }

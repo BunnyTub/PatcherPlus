@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using Akatsuki.Loader.Properties;
+using System;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Akatsuki.Loader
@@ -17,27 +16,73 @@ namespace Akatsuki.Loader
             InitializeComponent();
         }
 
+        [DllImport("user32.dll")]
+        static extern short GetAsyncKeyState(Keys vKey);
+
+        private bool IsShiftDown()
+        {
+            return (GetAsyncKeyState(Keys.ShiftKey) & 0x8000) != 0;
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Injector.CleanupPatchers();
             TitleText.Text = "Ready to play?";
             TitleText.ForeColor = Color.White;
+            if (!string.IsNullOrEmpty(Program.OsuExecutablePath))
+            {
+                FoundOsuAt(Program.OsuExecutablePath);
+            }
+            else
+            {
+                OsuLocationText.Text = $"Could not find osu! on your system. Try opening the game!";
+
+                string text = Utilities.FindInRegistry();
+
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    Program.OsuExecutablePath = text;
+                    FoundOsuAt(text);
+                }
+            }
+
+            AutoPatchBox.Checked = Settings.Default.AutoPatch;
+            ShowPathBox.Checked = Settings.Default.ShowPath;
+            IgnoreChanges = false;
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(Program.OsuExecutablePath))
+            {
+                MessageBox.Show("Could not find osu! on your system. Try opening the game, or click the \"Change\" button to browse to the executable.");
+                return;
+            }
+
             PlayButton.Enabled = false;
             PlayButton.Visible = false;
             TitleText.Text = "Launching...";
             TitleText.ForeColor = Color.Gray;
-            LoaderHub.PatcherRequest(releaseStreams.SelectedValue).Wait();
+            //LoaderHub.PatcherRequest(releaseStreams.SelectedValue).Wait();
+            new Thread(() => LoaderHub.PatcherRequest("stable")).Start();
             //PlayLoading();
         }
 
-        private void Failure()
+        public void FinalFailure()
         {
             TitleText.Text = "Launch failed.";
             TitleText.ForeColor = Color.Red;
+            PlayButton.Enabled = true;
+            PlayButton.Visible = true;
         }
+
+        //public void Failure()
+        //{
+        //    TitleText.Text = "Still launching...";
+        //    TitleText.ForeColor = Color.Orange;
+        //}
+
+        private string LastFoundOsu = string.Empty;
 
         public void FoundOsuAt(string path)
         {
@@ -47,8 +92,94 @@ namespace Akatsuki.Loader
             //    Akatsuki.Loader.Config.Save(Config);
             //}
 
-            OsuLocationText.Text = $"Located osu! at {path}, but if this isn't right, you can click the Change button.";
-            Activate();
+            if (LoaderHub.PatchingInProgress)
+            {
+            }
+            else
+            {
+                PlayButton.Enabled = true;
+                PlayButton.Visible = true;
+            }
+
+
+            if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Click \"Change File Path\".";
+            else OsuLocationText.Text = $"osu! was located. Press play when you're ready!";
+            OsuLocationText.ForeColor = Color.White;
+
+            LastFoundOsu = path;
+        }
+
+        private void OsuLocationText_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"Located osu! where: {LastFoundOsu}\r\n\r\nIs this wrong? Launch osu! or click \"Change File Path\" to choose an osu! executable file.");
+        }
+
+        private void FadeOut_Tick(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+            Opacity -= 0.05;
+            //if (Opacity <= 0) Environment.Exit(0);
+            if (Opacity <= 0.50) Close();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            BackgroundThreads.Stop();
+        }
+
+        private void ChangeButton_Click(object sender, EventArgs e)
+        {
+            if (!PlayButton.Enabled)
+            {
+                MessageBox.Show("You cannot change the file path right now.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            OpenOsuExeFileWindow.ShowDialog();
+        }
+
+        private void OpenOsuExeFileWindow_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            BackgroundThreads.Stop();
+            MessageBox.Show($"PatcherPlus will use the executable \"{OpenOsuExeFileWindow.FileName}\", and also stop searching for osu! until you restart this program.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Program.OsuExecutablePath = OpenOsuExeFileWindow.FileName;
+            FoundOsuAt(Program.OsuExecutablePath);
+        }
+
+        private void AutoPatch_Tick(object sender, EventArgs e)
+        {
+            AutoPatch.Stop();
+            if (!IsShiftDown()) if (Settings.Default.AutoPatch) PlayButton.PerformClick();
+        }
+
+        private bool IgnoreChanges = true;
+
+        private void AutoPatchBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IgnoreChanges) return;
+
+            Settings.Default.AutoPatch = AutoPatchBox.Checked;
+            if (AutoPatchBox.Checked)
+            {
+                MessageBox.Show("PatcherPlus will automatically start opening and patching when you open it. To pause this behavior, hold the SHIFT key immediately after you open the program.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void CheckButton_Tick(object sender, EventArgs e)
+        {
+            if (PlayButton.Visible && PlayButton.Enabled) ChangeButton.Visible = true;
+            else ChangeButton.Visible = false;
+        }
+
+        private void ShowPathBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IgnoreChanges) return;
+
+            Settings.Default.ShowPath = ShowPathBox.Checked;
+            if (ShowPathBox.Checked)
+            {
+                MessageBox.Show("PatcherPlus will replace the generic found osu! text with file path information next time changes are made.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
