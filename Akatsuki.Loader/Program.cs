@@ -47,7 +47,7 @@ namespace Akatsuki.Loader
             BackgroundThreads.Start();
             Application.Run(main);
             Settings.Default.Save();
-            Thread.Sleep(1500);
+            Thread.Sleep(2000);
             Closing = true;
         }
     }

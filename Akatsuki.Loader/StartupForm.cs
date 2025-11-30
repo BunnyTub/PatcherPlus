@@ -162,7 +162,6 @@ namespace Akatsuki.Loader
 
         private void StartupForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            BringItUpFurther.Stop();
             e.Cancel = !AllowClose;
             if (!AllowClose) FadeOutAnimation.Enabled = true;
         }
@@ -190,6 +189,7 @@ namespace Akatsuki.Loader
                 {
                     FadeInAnimation.Enabled = false;
                     AutoClose.Enabled = true;
+                    BringItUpFurther.Enabled = false;
                     return;
                 }
                 newOpacity += 5;
@@ -215,7 +215,6 @@ namespace Akatsuki.Loader
 
         private void BringItUpFurther_Tick(object sender, EventArgs e)
         {
-            Activate();
             BringToFront();
         }
     }

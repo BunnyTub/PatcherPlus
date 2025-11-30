@@ -1,8 +1,6 @@
 ﻿using Akatsuki.Loader.Properties;
 using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -14,6 +12,11 @@ namespace Akatsuki.Loader
         public MainForm()
         {
             InitializeComponent();
+            Styles.AddMemoryFont(Resources.Montserrat_Regular);
+            TitleText.Font = Styles.GetFont(0, 26, FontStyle.Regular);
+            //OsuLocationText.Font = Styles.GetFont(0, 11, FontStyle.Regular); // mehh, it gets lower quality the lower the size is (obviously), doesn't look great
+            //PlayButton.Font = Styles.GetFont(0, 18, FontStyle.Regular);
+            Opacity = 0;
         }
 
         [DllImport("user32.dll")]
@@ -83,10 +86,10 @@ namespace Akatsuki.Loader
         public void FinalFailure()
         {
             TitleText.Text = "Launch failed.";
-            TitleText.ForeColor = Color.Red;
+            TitleText.ForeColor = Color.Maroon;
             PlayButton.Enabled = true;
             PlayButton.Visible = true;
-            MessageBox.Show("Looks like osu! couldn't be patched properly. Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Looks like osu! couldn't be patched properly. If it was checking for updates, simply try again once the game opens. Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             if (StartedWithAutoPatching)
             {
@@ -120,8 +123,8 @@ namespace Akatsuki.Loader
             }
 
 
-            if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Click \"Change File Path\".";
-            else OsuLocationText.Text = $"osu! was located. Press play when you're ready!";
+            if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Open the game, or click \"Change File Path\".";
+            else OsuLocationText.Text = $"osu! was located. Click play when you're ready!\r\nClick here to see the discovered location.";
             OsuLocationText.ForeColor = Color.White;
 
             LastFoundOsu = path;
@@ -151,6 +154,7 @@ namespace Akatsuki.Loader
             {
                 BackgroundThreads.Stop();
             }
+            Settings.Default.Save();
         }
 
         private void ChangeButton_Click(object sender, EventArgs e)
@@ -182,7 +186,6 @@ namespace Akatsuki.Loader
                     StartedWithAutoPatching = true;
                     PlayButton.PerformClick();
                 }
-
             }
         }
 
@@ -218,6 +221,32 @@ namespace Akatsuki.Loader
             {
                 MessageBox.Show("PatcherPlus will replace the generic found osu! text with file path information next time changes are made.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void InfoText_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("PatcherPlus is not owned or officially endorsed by Akatsuki. PatcherPlus is a modification of the original Akatsuki Patcher, intended as an alternative patcher. This patcher does not modify the patches downloaded from Akatsuki's file hosts. You do not lose or gain any in-game benefits compared to using the official Akatsuki Patcher.\r\n\r\n- BunnyTub\r\n(11/29/2025 | MM/DD/YYYY)", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private readonly object FadeObject = new object();
+
+        private void FadeInAnimation_Tick(object sender, EventArgs e)
+        {
+            lock (FadeObject)
+            {
+                if (Opacity >= 1)
+                {
+                    FadeInAnimation.Enabled = false;
+                    return;
+                }
+
+                Opacity += 0.05;
+            }
+        }
+
+        private void BannerMessageBox_Click(object sender, EventArgs e)
+        {
+            InfoText_Click(sender, e);
         }
     }
 }

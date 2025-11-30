@@ -29,32 +29,40 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PlayButton = new System.Windows.Forms.Button();
-            this.TitleText = new System.Windows.Forms.Label();
             this.BackgroundProgressBar = new System.Windows.Forms.ProgressBar();
             this.FadeOut = new System.Windows.Forms.Timer(this.components);
             this.OsuLocationText = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.BottomPanel = new System.Windows.Forms.Panel();
+            this.InfoText = new System.Windows.Forms.Label();
             this.ShowPathBox = new System.Windows.Forms.CheckBox();
             this.AutoPatchBox = new System.Windows.Forms.CheckBox();
             this.ChangeButton = new System.Windows.Forms.Button();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
             this.AutoPatch = new System.Windows.Forms.Timer(this.components);
             this.CheckButton = new System.Windows.Forms.Timer(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
             this.LogoBox = new System.Windows.Forms.PictureBox();
-            this.panel1.SuspendLayout();
+            this.TitleText = new System.Windows.Forms.Label();
+            this.BannerMessageBox = new System.Windows.Forms.PictureBox();
+            this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
+            this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayButton
             // 
             this.PlayButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PlayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.PlayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.PlayButton.Enabled = false;
-            this.PlayButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.PlayButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.PlayButton.FlatAppearance.BorderSize = 2;
+            this.PlayButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PlayButton.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.PlayButton.ForeColor = System.Drawing.Color.Cornsilk;
-            this.PlayButton.Location = new System.Drawing.Point(447, 36);
+            this.PlayButton.Location = new System.Drawing.Point(316, 83);
             this.PlayButton.Name = "PlayButton";
             this.PlayButton.Size = new System.Drawing.Size(135, 47);
             this.PlayButton.TabIndex = 0;
@@ -63,24 +71,10 @@
             this.PlayButton.Visible = false;
             this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
             // 
-            // TitleText
-            // 
-            this.TitleText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.TitleText.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TitleText.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TitleText.ForeColor = System.Drawing.Color.White;
-            this.TitleText.Location = new System.Drawing.Point(0, 0);
-            this.TitleText.Margin = new System.Windows.Forms.Padding(0);
-            this.TitleText.Name = "TitleText";
-            this.TitleText.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
-            this.TitleText.Size = new System.Drawing.Size(594, 60);
-            this.TitleText.TabIndex = 1;
-            this.TitleText.Text = "Ready to play?";
-            // 
             // BackgroundProgressBar
             // 
             this.BackgroundProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BackgroundProgressBar.Location = new System.Drawing.Point(447, 36);
+            this.BackgroundProgressBar.Location = new System.Drawing.Point(316, 83);
             this.BackgroundProgressBar.MarqueeAnimationSpeed = 22;
             this.BackgroundProgressBar.Name = "BackgroundProgressBar";
             this.BackgroundProgressBar.Size = new System.Drawing.Size(135, 47);
@@ -98,34 +92,50 @@
             this.OsuLocationText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OsuLocationText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.OsuLocationText.ForeColor = System.Drawing.Color.Orange;
-            this.OsuLocationText.Location = new System.Drawing.Point(9, 39);
+            this.OsuLocationText.Location = new System.Drawing.Point(9, 154);
             this.OsuLocationText.Margin = new System.Windows.Forms.Padding(0);
             this.OsuLocationText.Name = "OsuLocationText";
-            this.OsuLocationText.Size = new System.Drawing.Size(435, 44);
+            this.OsuLocationText.Size = new System.Drawing.Size(445, 44);
             this.OsuLocationText.TabIndex = 3;
             this.OsuLocationText.Text = "Searching for osu!...";
             this.OsuLocationText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.OsuLocationText.Click += new System.EventHandler(this.OsuLocationText_Click);
             // 
-            // panel1
+            // BottomPanel
             // 
-            this.panel1.Controls.Add(this.ShowPathBox);
-            this.panel1.Controls.Add(this.AutoPatchBox);
-            this.panel1.Controls.Add(this.ChangeButton);
-            this.panel1.Controls.Add(this.PlayButton);
-            this.panel1.Controls.Add(this.BackgroundProgressBar);
-            this.panel1.Controls.Add(this.OsuLocationText);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 217);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(594, 95);
-            this.panel1.TabIndex = 4;
+            this.BottomPanel.Controls.Add(this.ShowPathBox);
+            this.BottomPanel.Controls.Add(this.AutoPatchBox);
+            this.BottomPanel.Controls.Add(this.ChangeButton);
+            this.BottomPanel.Controls.Add(this.PlayButton);
+            this.BottomPanel.Controls.Add(this.BackgroundProgressBar);
+            this.BottomPanel.Controls.Add(this.BannerMessageBox);
+            this.BottomPanel.Controls.Add(this.InfoText);
+            this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.BottomPanel.Location = new System.Drawing.Point(0, 201);
+            this.BottomPanel.Name = "BottomPanel";
+            this.BottomPanel.Size = new System.Drawing.Size(463, 142);
+            this.BottomPanel.TabIndex = 4;
+            // 
+            // InfoText
+            // 
+            this.InfoText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.InfoText.Font = new System.Drawing.Font("Montserrat", 14F);
+            this.InfoText.ForeColor = System.Drawing.Color.Cornsilk;
+            this.InfoText.Location = new System.Drawing.Point(9, 83);
+            this.InfoText.Margin = new System.Windows.Forms.Padding(0);
+            this.InfoText.Name = "InfoText";
+            this.InfoText.Size = new System.Drawing.Size(304, 47);
+            this.InfoText.TabIndex = 6;
+            this.InfoText.Text = "PatcherPlus is not owned by Akatsuki. Click to know more.";
+            this.InfoText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.InfoText.Click += new System.EventHandler(this.InfoText_Click);
             // 
             // ShowPathBox
             // 
             this.ShowPathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ShowPathBox.AutoSize = true;
-            this.ShowPathBox.Location = new System.Drawing.Point(149, 13);
+            this.ShowPathBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ShowPathBox.Location = new System.Drawing.Point(345, 4);
             this.ShowPathBox.Name = "ShowPathBox";
             this.ShowPathBox.Size = new System.Drawing.Size(106, 19);
             this.ShowPathBox.TabIndex = 7;
@@ -137,7 +147,8 @@
             // 
             this.AutoPatchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AutoPatchBox.AutoSize = true;
-            this.AutoPatchBox.Location = new System.Drawing.Point(261, 13);
+            this.AutoPatchBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.AutoPatchBox.Location = new System.Drawing.Point(271, 29);
             this.AutoPatchBox.Name = "AutoPatchBox";
             this.AutoPatchBox.Size = new System.Drawing.Size(180, 19);
             this.AutoPatchBox.TabIndex = 6;
@@ -149,13 +160,15 @@
             // 
             this.ChangeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ChangeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.ChangeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ChangeButton.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ChangeButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.ChangeButton.FlatAppearance.BorderSize = 2;
+            this.ChangeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ChangeButton.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.ChangeButton.ForeColor = System.Drawing.Color.Cornsilk;
-            this.ChangeButton.Location = new System.Drawing.Point(447, 10);
-            this.ChangeButton.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.ChangeButton.Location = new System.Drawing.Point(316, 54);
+            this.ChangeButton.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.ChangeButton.Name = "ChangeButton";
-            this.ChangeButton.Size = new System.Drawing.Size(135, 23);
+            this.ChangeButton.Size = new System.Drawing.Size(135, 26);
             this.ChangeButton.TabIndex = 3;
             this.ChangeButton.Text = "Change File Path";
             this.ChangeButton.UseVisualStyleBackColor = false;
@@ -179,40 +192,87 @@
             this.CheckButton.Enabled = true;
             this.CheckButton.Tick += new System.EventHandler(this.CheckButton_Tick);
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 60);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(463, 2);
+            this.panel1.TabIndex = 6;
+            // 
             // LogoBox
             // 
+            this.LogoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LogoBox.Image = global::Akatsuki.Loader.Properties.Resources.AkatsukiLogoLowRes;
-            this.LogoBox.Location = new System.Drawing.Point(447, 77);
+            this.LogoBox.Location = new System.Drawing.Point(0, 68);
             this.LogoBox.Name = "LogoBox";
-            this.LogoBox.Size = new System.Drawing.Size(135, 109);
+            this.LogoBox.Size = new System.Drawing.Size(463, 86);
             this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
+            // 
+            // TitleText
+            // 
+            this.TitleText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.TitleText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TitleText.Font = new System.Drawing.Font("Segoe UI", 26F);
+            this.TitleText.ForeColor = System.Drawing.Color.White;
+            this.TitleText.Image = global::Akatsuki.Loader.Properties.Resources.TriangleTop;
+            this.TitleText.Location = new System.Drawing.Point(0, 0);
+            this.TitleText.Margin = new System.Windows.Forms.Padding(0);
+            this.TitleText.Name = "TitleText";
+            this.TitleText.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
+            this.TitleText.Size = new System.Drawing.Size(463, 60);
+            this.TitleText.TabIndex = 1;
+            this.TitleText.Text = "Ready to play?";
+            this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BannerMessageBox
+            // 
+            this.BannerMessageBox.Image = global::Akatsuki.Loader.Properties.Resources.NotByAkatsuki;
+            this.BannerMessageBox.Location = new System.Drawing.Point(9, 83);
+            this.BannerMessageBox.Name = "BannerMessageBox";
+            this.BannerMessageBox.Size = new System.Drawing.Size(304, 47);
+            this.BannerMessageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.BannerMessageBox.TabIndex = 7;
+            this.BannerMessageBox.TabStop = false;
+            this.BannerMessageBox.Click += new System.EventHandler(this.BannerMessageBox_Click);
+            // 
+            // FadeInAnimation
+            // 
+            this.FadeInAnimation.Enabled = true;
+            this.FadeInAnimation.Interval = 2;
+            this.FadeInAnimation.Tick += new System.EventHandler(this.FadeInAnimation_Tick);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(594, 312);
+            this.ClientSize = new System.Drawing.Size(463, 343);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.LogoBox);
             this.Controls.Add(this.TitleText);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.BottomPanel);
+            this.Controls.Add(this.OsuLocationText);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PatcherPlus";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.BottomPanel.ResumeLayout(false);
+            this.BottomPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -223,7 +283,7 @@
         public System.Windows.Forms.Label OsuLocationText;
         public System.Windows.Forms.Timer FadeOut;
         public System.Windows.Forms.ProgressBar BackgroundProgressBar;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel BottomPanel;
         public System.Windows.Forms.Button ChangeButton;
         private System.Windows.Forms.PictureBox LogoBox;
         private System.Windows.Forms.OpenFileDialog OpenOsuExeFileWindow;
@@ -231,5 +291,9 @@
         private System.Windows.Forms.CheckBox AutoPatchBox;
         private System.Windows.Forms.Timer CheckButton;
         private System.Windows.Forms.CheckBox ShowPathBox;
+        public System.Windows.Forms.Label InfoText;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox BannerMessageBox;
+        private System.Windows.Forms.Timer FadeInAnimation;
     }
 }

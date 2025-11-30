@@ -26,6 +26,10 @@ namespace Akatsuki.Loader
             }
             catch
             {
+                lock (r0)
+                {
+                    _ = r0.Trim();
+                }
             }
             finally
             {

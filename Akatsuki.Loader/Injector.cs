@@ -1,6 +1,5 @@
 ﻿using HoLLy.ManagedInjector;
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;

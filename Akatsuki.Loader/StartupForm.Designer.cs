@@ -96,6 +96,7 @@
             // BringItUpFurther
             // 
             this.BringItUpFurther.Enabled = true;
+            this.BringItUpFurther.Interval = 80;
             this.BringItUpFurther.Tick += new System.EventHandler(this.BringItUpFurther_Tick);
             // 
             // StartupForm

@@ -70,19 +70,5 @@ namespace Akatsuki.Loader.Properties {
                 this["KnownTrickery"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool BySettingThisToTrueIRiskGettingBannedFromBanchoAndDevsAreNotResponsibleForYourActions {
-            get {
-                return ((bool)(this["BySettingThisToTrueIRiskGettingBannedFromBanchoAndDevsAreNotResponsibleForYourAct" +
-                    "ions"]));
-            }
-            set {
-                this["BySettingThisToTrueIRiskGettingBannedFromBanchoAndDevsAreNotResponsibleForYourAct" +
-                    "ions"] = value;
-            }
-        }
     }
 }

@@ -79,17 +79,19 @@ namespace Akatsuki.Loader
                 if (Injector.Inject(Program.OsuExecutablePath, data, filename))
                 {
                     PatchingInProgress = false;
+
+                    // this is just stylization fun, it's not needed, and I might end up removing it
                     HideWindow("osu! (loading)", true);
                     new Thread(() =>
                     {
                         StartupForm startup = new StartupForm(Resources.PatchLogo);
                         startup.ShowDialog();
                         startup.BringToFront();
-                        startup.Activate();
                         startup.Dispose();
                         Thread.Sleep(2000);
                         ForwardWindow("osu!");
                     }).Start();
+
                     Program.main.Invoke((MethodInvoker)delegate
                     {
                         Program.main.TitleText.Text = "See you there!";
