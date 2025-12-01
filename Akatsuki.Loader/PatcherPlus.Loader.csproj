@@ -82,6 +82,8 @@
     </Compile>
     <Compile Include="Injector.cs" />
     <Compile Include="LoaderHub.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="StartupForm.cs">
       <SubType>Form</SubType>
     </Compile>

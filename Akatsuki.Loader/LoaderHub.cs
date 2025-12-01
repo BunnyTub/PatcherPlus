@@ -128,7 +128,7 @@ namespace Akatsuki.Loader
             catch (Exception ex)
             {
                 PatchingInProgress = false;
-                Console.WriteLine(ex.Message);
+                Log.WriteLog(ex.Message);
                 Program.main.Invoke((MethodInvoker)delegate
                 {
                     Program.main.FinalFailure();
@@ -169,7 +169,7 @@ namespace Akatsuki.Loader
 
                 if (process != null && !process.HasExited)
                 {
-                    Console.WriteLine("Closing osu!...");
+                    Log.WriteLog("Closing osu!...");
 
                     Program.main.Invoke((MethodInvoker)delegate
                     {
@@ -204,7 +204,7 @@ namespace Akatsuki.Loader
             {
             }
 
-            Console.WriteLine("Preparing patch...");
+            Log.WriteLog("Preparing patch...");
 
             Program.main.Invoke((MethodInvoker)delegate
             {
@@ -232,15 +232,15 @@ namespace Akatsuki.Loader
                 string fullPath = null;
                 string tempPath = Path.GetTempPath() + "paplubun";
 
-                Console.WriteLine($"Creating temp path for data... {tempPath}");
+                Log.WriteLog($"Creating temp path for data... {tempPath}");
                 Directory.CreateDirectory(tempPath);
 
                 fullPath = $"{tempPath}\\{Injector.fileNamePattern}";
-                Console.WriteLine($"Full path is: {fullPath}");
+                Log.WriteLog($"Full path is: {fullPath}");
 
                 void Download()
                 {
-                    Console.WriteLine("Downloading...");
+                    Log.WriteLog("Downloading...");
 
                     Program.main.Invoke((MethodInvoker)delegate
                     {
@@ -267,7 +267,7 @@ namespace Akatsuki.Loader
 
                     if (tricks != Settings.Default.KnownTrickery)
                     {
-                        Console.WriteLine($"Cache mismatch, the file will be deleted. ({tricks} != {Settings.Default.KnownTrickery})");
+                        Log.WriteLog($"Cache mismatch, the file will be deleted. ({tricks} != {Settings.Default.KnownTrickery})");
 
                         Program.main.Invoke((MethodInvoker)delegate
                         {
@@ -298,7 +298,7 @@ namespace Akatsuki.Loader
                     Download();
                 }
 
-                Console.WriteLine("Using cache.");
+                Log.WriteLog("Using cache.");
 
                 Program.main.Invoke((MethodInvoker)delegate
                 {

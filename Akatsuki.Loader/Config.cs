@@ -27,7 +27,7 @@ namespace Akatsuki.Loader
 				return null;
 			}
 
-			return Directory.CreateDirectory(folderPath + "\\Akatsuki");
+			return Directory.CreateDirectory(folderPath + "\\PatcherPlus");
 		}
 
 		public static void Save(Config config, bool create = false)

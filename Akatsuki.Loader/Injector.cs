@@ -37,7 +37,7 @@ namespace Akatsuki.Loader
         // can return null, but Framework doesn't support nullable return types
         private static ProcessModule getAuth(Process process)
         {
-            if (process.HasExited) Console.WriteLine("osu! exited...?");
+            if (process.HasExited) Log.WriteLog("osu! exited...?");
             return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
         }
 
@@ -50,15 +50,15 @@ namespace Akatsuki.Loader
 
             Process InjectNow()
             {
-                Console.WriteLine("Applying patch...");
+                Log.WriteLog("Applying patch...");
 
-                if (patcherBytes != null) Console.WriteLine("Using bytes.");
-                else if (!string.IsNullOrWhiteSpace(filename)) Console.WriteLine("Using filename.");
+                if (patcherBytes != null) Log.WriteLog("Using bytes.");
+                else if (!string.IsNullOrWhiteSpace(filename)) Log.WriteLog("Using filename.");
 
                 string fullPath = "";
 
                 string tempPath = Path.GetTempPath() + "paplubun";
-                Console.WriteLine("Creating temp path for data...");
+                Log.WriteLog("Creating temp path for data...");
                 Directory.CreateDirectory(tempPath);
                 string path = fileNamePattern;
                 fullPath = $"{tempPath}\\{path}";
@@ -66,13 +66,13 @@ namespace Akatsuki.Loader
                 if (!string.IsNullOrWhiteSpace(filename)) fullPath = filename;
                 else if (patcherBytes != null)
                 {
-                    Console.WriteLine($"Writing data to temp path at {fullPath}...");
+                    Log.WriteLog($"Writing data to temp path at {fullPath}...");
                     File.WriteAllBytes(fullPath, patcherBytes);
                 }
 
                 try
                 {
-                    Console.WriteLine($"Starting osu!... {osuPath}");
+                    Log.WriteLog($"Starting osu!... {osuPath}");
 
                     Process process = null;
                     if (ReturnedNullDueToUpdateOrCrucialOperation)
@@ -123,7 +123,7 @@ namespace Akatsuki.Loader
 
                     while (processModule == null)
                     {
-                        Console.WriteLine($"Waiting for osu!... ({num})");
+                        Log.WriteLog($"Waiting for osu!... ({num})");
 
                         bool UpdateOrCrucialOperationInProgress = false;
 
@@ -147,7 +147,7 @@ namespace Akatsuki.Loader
 
                         if (num >= 50)
                         {
-                            Console.WriteLine($"Failed to patch the osu! client because the wait to verify loaded resources took too long.");
+                            Log.WriteLog($"Failed to patch the osu! client because the wait to verify loaded resources took too long.");
                             if (!process.HasExited) process?.Kill();
                             //MessageBox.Show("Failed loading Akatsuki Patcher.\nPlease make sure you're running the latest osu! or relocate/repair your osu! install.");
                             return null;
@@ -161,7 +161,7 @@ namespace Akatsuki.Loader
 
                         if (process.HasExited)
                         {
-                            Console.WriteLine($"Failed to patch the osu! client because it has unexpectedly closed.");
+                            Log.WriteLog($"Failed to patch the osu! client because it has unexpectedly closed.");
                             return null;
                         }
 
@@ -178,7 +178,7 @@ namespace Akatsuki.Loader
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            Log.WriteLog(ex.Message);
                             continue;
                         }
                         break;
@@ -188,7 +188,7 @@ namespace Akatsuki.Loader
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Log.WriteLog(ex.Message);
                     return null;
                 }
             }

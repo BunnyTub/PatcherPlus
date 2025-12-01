@@ -54,7 +54,7 @@ namespace Akatsuki.Loader
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Log.WriteLog(ex.Message);
                 }
             }
         }
