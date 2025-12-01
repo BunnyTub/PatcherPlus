@@ -49,6 +49,9 @@ namespace Akatsuki.Loader
             Settings.Default.Save();
             Thread.Sleep(2000);
             Closing = true;
+
+            //if (LoaderHub.PatchedSuccessfully) Application.Run(new GameOptionsForm());
+            //Settings.Default.Save();
         }
     }
 }

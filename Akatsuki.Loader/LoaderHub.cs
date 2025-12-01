@@ -72,16 +72,32 @@ namespace Akatsuki.Loader
             );
         }
 
+        public static bool PatchedSuccessfully { get; private set; } = false;
+
         private static void PatcherResponse(byte[] data, string filename)
         {
             try
             {
-                if (Injector.Inject(Program.OsuExecutablePath, data, filename))
+                Process process = Injector.Inject(Program.OsuExecutablePath, data, filename);
+
+                if (process != null)
                 {
                     PatchingInProgress = false;
+                    PatchedSuccessfully = true;
 
                     // this is just stylization fun, it's not needed, and I might end up removing it
                     HideWindow("osu! (loading)", true);
+
+                    new Thread(() =>
+                    {
+                        StartupForm startup = new StartupForm(Resources.PatchLogo);
+                        startup.ShowDialog();
+                        startup.BringToFront();
+                        startup.Dispose();
+                        Thread.Sleep(2000);
+                        ForwardWindow("osu!");
+                    }).Start();
+                    
                     new Thread(() =>
                     {
                         StartupForm startup = new StartupForm(Resources.PatchLogo);

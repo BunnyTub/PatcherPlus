@@ -41,19 +41,19 @@ namespace Akatsuki.Loader
             return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
         }
 
-        public static bool Inject(string osuPath, byte[] patcherBytes, string filename)
+        public static bool LastInjectUpdateOrOperationDetected { get; private set; } = false;
+
+        public static Process Inject(string osuPath, byte[] patcherBytes, string filename)
         {
-            bool InjectNow()
+            LastInjectUpdateOrOperationDetected = false;
+            bool ReturnedNullDueToUpdateOrCrucialOperation = false;
+
+            Process InjectNow()
             {
                 Console.WriteLine("Applying patch...");
+
                 if (patcherBytes != null) Console.WriteLine("Using bytes.");
                 else if (!string.IsNullOrWhiteSpace(filename)) Console.WriteLine("Using filename.");
-
-                Program.main.Invoke((MethodInvoker)delegate
-                {
-                    Program.main.TitleText.Text = "Applying patch...";
-                    Program.main.TitleText.ForeColor = Color.Gray;
-                });
 
                 string fullPath = "";
 
@@ -73,26 +73,98 @@ namespace Akatsuki.Loader
                 try
                 {
                     Console.WriteLine($"Starting osu!... {osuPath}");
-                    Process process = Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = osuPath, Arguments = "-devserver akatsuki.gg" });
-                    
+
+                    Process process = null;
+                    if (ReturnedNullDueToUpdateOrCrucialOperation)
+                    {
+                        foreach (Process proc in Process.GetProcesses())
+                        {
+                            try
+                            {
+                                if (proc.MainModule.FileName.ToLowerInvariant() == osuPath.ToLowerInvariant())
+                                {
+                                    foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
+                                    {
+                                        if (title.Contains("updater"))
+                                        {
+                                            Program.main.Invoke((MethodInvoker)delegate
+                                            {
+                                                Program.main.TitleText.Text = "osu! is updating...";
+                                                Program.main.TitleText.ForeColor = Color.Gray;
+                                            });
+
+                                            LastInjectUpdateOrOperationDetected = true;
+
+                                            //ReturnedNullDueToUpdateOrCrucialOperation = true;
+                                            //return null;
+                                        }
+                                        else
+                                        {
+                                            process = proc;
+                                        }
+                                    }
+
+                                    break;
+                                }
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        process = new Process();
+                    }
+                    else process = Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = osuPath, Arguments = "-devserver akatsuki.gg" });
+
+                    ReturnedNullDueToUpdateOrCrucialOperation = false;
+
                     int num = 0;
 
-                    while (getAuth(process) == null)
+                    ProcessModule processModule = null;
+
+                    while (processModule == null)
                     {
                         Console.WriteLine($"Waiting for osu!... ({num})");
+
+                        bool UpdateOrCrucialOperationInProgress = false;
+
+                        foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
+                        {
+                            if (title.Contains("updater"))
+                            {
+                                Program.main.Invoke((MethodInvoker)delegate
+                                {
+                                    Program.main.TitleText.Text = "osu! is updating...";
+                                    Program.main.TitleText.ForeColor = Color.Gray;
+                                });
+
+                                LastInjectUpdateOrOperationDetected = true;
+
+                                UpdateOrCrucialOperationInProgress = true;
+                                ReturnedNullDueToUpdateOrCrucialOperation = true;
+                                return null;
+                            }
+                        }
+
                         if (num >= 50)
                         {
                             Console.WriteLine($"Failed to patch the osu! client because the wait to verify loaded resources took too long.");
                             if (!process.HasExited) process?.Kill();
                             //MessageBox.Show("Failed loading Akatsuki Patcher.\nPlease make sure you're running the latest osu! or relocate/repair your osu! install.");
-                            return false;
+                            return null;
                         }
+
+                        processModule = getAuth(process);
+
+                        if (UpdateOrCrucialOperationInProgress) continue;
+
                         Thread.Sleep(100);
+
                         if (process.HasExited)
                         {
                             Console.WriteLine($"Failed to patch the osu! client because it has unexpectedly closed.");
-                            return false;
+                            return null;
                         }
+
                         num++;
                     }
 
@@ -112,29 +184,40 @@ namespace Akatsuki.Loader
                         break;
                     }
 
-                    return true;
+                    return process;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return false;
+                    return null;
                 }
             }
 
+            Program.main.Invoke((MethodInvoker)delegate
+            {
+                Program.main.TitleText.Text = "Applying patch...";
+                Program.main.TitleText.ForeColor = Color.Gray;
+            });
+
             for (int i = 0; i < 3; i++)
             {
-                if (InjectNow()) return true;
+                Process process = InjectNow();
 
-                Program.main.Invoke((MethodInvoker)delegate
+                if (process != null) return process;
+
+                if (!ReturnedNullDueToUpdateOrCrucialOperation)
                 {
-                    Program.main.TitleText.Text = $"Patching failed... ({i + 1})";
-                    Program.main.TitleText.ForeColor = Color.DarkGray;
-                });
+                    Program.main.Invoke((MethodInvoker)delegate
+                    {
+                        Program.main.TitleText.Text = $"Patching failed... ({i + 1})";
+                        Program.main.TitleText.ForeColor = Color.DarkGray;
+                    });
+                }
 
                 Thread.Sleep(1000);
             }
 
-            return false;
+            return null;
         }
     }
 }

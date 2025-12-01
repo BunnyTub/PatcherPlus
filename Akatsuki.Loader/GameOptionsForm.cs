@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AkatsukiDecomp
+namespace Akatsuki.Loader
 {
-    public partial class Form1 : Form
+    public partial class GameOptionsForm : Form
     {
-        public Form1()
+        public GameOptionsForm()
         {
             InitializeComponent();
+        }
+
+        private void GameOptionsForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

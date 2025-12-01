@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akatsuki.Loader", "Akatsuki.Loader\Akatsuki.Loader.csproj", "{060C01EE-6621-424E-9D7B-4C1DC8C009C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akatsuki.Patcher", "Akatsuki.Patcher\Akatsuki.Patcher.csproj", "{E55423FC-5056-4AF4-8149-727C6A6A4BF5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{060C01EE-6621-424E-9D7B-4C1DC8C009C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{060C01EE-6621-424E-9D7B-4C1DC8C009C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{060C01EE-6621-424E-9D7B-4C1DC8C009C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E55423FC-5056-4AF4-8149-727C6A6A4BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E55423FC-5056-4AF4-8149-727C6A6A4BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E55423FC-5056-4AF4-8149-727C6A6A4BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E55423FC-5056-4AF4-8149-727C6A6A4BF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

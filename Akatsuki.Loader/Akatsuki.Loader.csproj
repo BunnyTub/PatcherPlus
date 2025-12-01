@@ -74,8 +74,15 @@
     <Compile Include="Common\BranchVersionInfo.cs" />
     <Compile Include="Common\LoaderUpdates.cs" />
     <Compile Include="Common\LoaderVersionInfo.cs" />
+    <Compile Include="GameOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameOptionsForm.Designer.cs">
+      <DependentUpon>GameOptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Injector.cs" />
     <Compile Include="LoaderHub.cs" />
+    <Compile Include="OsuAssets.cs" />
     <Compile Include="StartupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,7 +100,17 @@
     <Compile Include="ReflectConvert.cs" />
     <Compile Include="Styles.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="WindowMethods.cs" />
+    <Compile Include="WonkyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WonkyForm.Designer.cs">
+      <DependentUpon>WonkyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Trickery.cs" />
+    <EmbeddedResource Include="GameOptionsForm.resx">
+      <DependentUpon>GameOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StartupForm.resx">
       <DependentUpon>StartupForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -111,6 +128,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Config.cs" />
+    <EmbeddedResource Include="WonkyForm.resx">
+      <DependentUpon>WonkyForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

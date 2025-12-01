@@ -85,11 +85,22 @@ namespace Akatsuki.Loader
 
         public void FinalFailure()
         {
-            TitleText.Text = "Launch failed.";
-            TitleText.ForeColor = Color.Maroon;
-            PlayButton.Enabled = true;
-            PlayButton.Visible = true;
-            MessageBox.Show("Looks like osu! couldn't be patched properly. If it was checking for updates, simply try again once the game opens. Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (Injector.LastInjectUpdateOrOperationDetected)
+            {
+                TitleText.Text = "osu! update required.";
+                TitleText.ForeColor = Color.Maroon;
+                PlayButton.Enabled = true;
+                PlayButton.Visible = true;
+                MessageBox.Show("Looks like osu! was updating. Simply try to repatch again! Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                TitleText.Text = "Launch failed.";
+                TitleText.ForeColor = Color.Maroon;
+                PlayButton.Enabled = true;
+                PlayButton.Visible = true;
+                MessageBox.Show("Looks like osu! couldn't be patched properly. If it was checking for updates, simply try again once the game opens. Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             if (StartedWithAutoPatching)
             {
