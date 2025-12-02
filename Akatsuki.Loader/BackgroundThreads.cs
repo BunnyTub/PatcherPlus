@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     internal static class BackgroundThreads
     {
@@ -52,9 +52,12 @@ namespace Akatsuki.Loader
                         });
                     }
                 }
+                catch (ThreadAbortException)
+                {
+                }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(ex.Message);
+                    Log.WriteLog($"An issue occurred while searching for osu!. {ex.Message}");
                 }
             }
         }

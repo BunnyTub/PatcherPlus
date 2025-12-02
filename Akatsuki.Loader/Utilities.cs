@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     internal static class Utilities
     {

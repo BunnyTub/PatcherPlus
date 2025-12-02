@@ -1,11 +1,11 @@
-﻿using Akatsuki.Loader.Properties;
+﻿using PatcherPlus.Loader.Properties;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public partial class MainForm : Form
     {
@@ -85,13 +85,24 @@ namespace Akatsuki.Loader
 
         public void FinalFailure()
         {
+            bool DoNotPerformAutomaticClose = false;
+
             if (Injector.LastInjectUpdateOrOperationDetected)
             {
                 TitleText.Text = "osu! update required.";
                 TitleText.ForeColor = Color.Maroon;
                 PlayButton.Enabled = true;
                 PlayButton.Visible = true;
-                MessageBox.Show("Looks like osu! was updating. Simply try to repatch again! Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                Log.WriteLog("osu! may be updating, so it wasn't patched properly.");
+
+                if (MessageBox.Show("Looks like osu! was/is updating, so patching stopped.\r\nDo you want to start patching again?\r\n\r\n(Ensure that osu! isn't updating before continuing!)", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    PlayButton.Enabled = true;
+                    PlayButton.Visible = true;
+                    PlayButton.PerformClick();
+                    DoNotPerformAutomaticClose = true;
+                }
             }
             else
             {
@@ -99,12 +110,15 @@ namespace Akatsuki.Loader
                 TitleText.ForeColor = Color.Maroon;
                 PlayButton.Enabled = true;
                 PlayButton.Visible = true;
+
+                Log.WriteLog("osu! wasn't able to be patched properly.");
+
                 MessageBox.Show("Looks like osu! couldn't be patched properly. If it was checking for updates, simply try again once the game opens. Consider visiting https://akatsuki.gg/doc/patcher_troubleshooting for common troubleshooting steps!\r\n\r\n(Please close other patchers, they may also interfere.)", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             if (StartedWithAutoPatching)
             {
-                Close();
+                if (!DoNotPerformAutomaticClose) Close();
             }
         }
 
@@ -121,7 +135,7 @@ namespace Akatsuki.Loader
             //if (Config.ExecutablePath != path)
             //{
             //    Config.ExecutablePath = path;
-            //    Akatsuki.Loader.Config.Save(Config);
+            //    PatcherPlus.Loader.Config.Save(Config);
             //}
 
             if (LoaderHub.PatchingInProgress)
@@ -133,17 +147,18 @@ namespace Akatsuki.Loader
                 PlayButton.Visible = true;
             }
 
-
             if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Open the game, or click \"Change File Path\".";
             else OsuLocationText.Text = $"osu! was located. Click play when you're ready!\r\nClick here to see the discovered location.";
             OsuLocationText.ForeColor = Color.White;
+            PlayButton.BackColor = Color.DarkGreen;
+
 
             LastFoundOsu = path;
         }
 
         private void OsuLocationText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Located osu! where: {LastFoundOsu}\r\n\r\nIs this wrong? Launch osu! or click \"Change File Path\" to choose an osu! executable file.");
+            MessageBox.Show($"osu! was located: {LastFoundOsu}");
         }
 
         private void FadeOut_Tick(object sender, EventArgs e)
@@ -175,6 +190,11 @@ namespace Akatsuki.Loader
                 MessageBox.Show("You cannot change the file path right now.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            //switch (MessageBox.Show("Here are your options.\r\n[Choosing YES] Locate the file manually.\r\n[Choosing NO] Locate the file by detecting your open game.", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
+            //{
+
+            //}
 
             OpenOsuExeFileWindow.ShowDialog();
         }
@@ -236,7 +256,7 @@ namespace Akatsuki.Loader
 
         private void InfoText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("PatcherPlus is not owned or officially endorsed by Akatsuki. PatcherPlus is a modification of the original Akatsuki Patcher, intended as an alternative patcher. This patcher does not modify the patches downloaded from Akatsuki's file hosts. You do not lose or gain any in-game benefits compared to using the official Akatsuki Patcher.\r\n\r\n- BunnyTub\r\n(11/29/2025 | MM/DD/YYYY)", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("PatcherPlus is not owned or officially endorsed by PatcherPlus. PatcherPlus is a modification of the original Akatsuki Patcher, intended as an alternative patcher. This patcher does not modify the patches downloaded from Akatsuki's file hosts. You do not lose or gain any in-game benefits compared to using the official Akatsuki Patcher.\r\n\r\n- BunnyTub\r\n(11/29/2025 | MM/DD/YYYY)", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private readonly object FadeObject = new object();
@@ -258,6 +278,11 @@ namespace Akatsuki.Loader
         private void BannerMessageBox_Click(object sender, EventArgs e)
         {
             InfoText_Click(sender, e);
+        }
+
+        private void BannerMessageText_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("osu!(lazer) is NOT the same codebase as osu!(stable or cuttingedge)", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Akatsuki.Loader.Properties;
+﻿using PatcherPlus.Loader.Properties;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public static class LoaderHub
     {

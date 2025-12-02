@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public partial class StartupForm : Form
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public static class ReflectConvert
     {

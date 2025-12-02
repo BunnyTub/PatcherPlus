@@ -1,4 +1,4 @@
-﻿namespace Akatsuki.Loader
+﻿namespace PatcherPlus.Loader
 {
     partial class MainForm
     {
@@ -35,6 +35,7 @@
             this.FadeOut = new System.Windows.Forms.Timer(this.components);
             this.OsuLocationText = new System.Windows.Forms.Label();
             this.BottomPanel = new System.Windows.Forms.Panel();
+            this.BannerMessageText = new System.Windows.Forms.Label();
             this.ShowPathBox = new System.Windows.Forms.CheckBox();
             this.AutoPatchBox = new System.Windows.Forms.CheckBox();
             this.ChangeButton = new System.Windows.Forms.Button();
@@ -47,7 +48,6 @@
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
             this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
@@ -104,7 +104,7 @@
             // 
             // BottomPanel
             // 
-            this.BottomPanel.Controls.Add(this.label1);
+            this.BottomPanel.Controls.Add(this.BannerMessageText);
             this.BottomPanel.Controls.Add(this.ShowPathBox);
             this.BottomPanel.Controls.Add(this.AutoPatchBox);
             this.BottomPanel.Controls.Add(this.ChangeButton);
@@ -117,6 +117,20 @@
             this.BottomPanel.Name = "BottomPanel";
             this.BottomPanel.Size = new System.Drawing.Size(463, 142);
             this.BottomPanel.TabIndex = 4;
+            // 
+            // BannerMessageText
+            // 
+            this.BannerMessageText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BannerMessageText.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.BannerMessageText.ForeColor = System.Drawing.Color.Gray;
+            this.BannerMessageText.Location = new System.Drawing.Point(9, 54);
+            this.BannerMessageText.Margin = new System.Windows.Forms.Padding(0);
+            this.BannerMessageText.Name = "BannerMessageText";
+            this.BannerMessageText.Size = new System.Drawing.Size(304, 26);
+            this.BannerMessageText.TabIndex = 7;
+            this.BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
+            this.BannerMessageText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.BannerMessageText.Click += new System.EventHandler(this.BannerMessageText_Click);
             // 
             // ShowPathBox
             // 
@@ -164,7 +178,7 @@
             // 
             // BannerMessageBox
             // 
-            this.BannerMessageBox.Image = global::Akatsuki.Loader.Properties.Resources.NotByAkatsuki;
+            this.BannerMessageBox.Image = global::PatcherPlus.Loader.Properties.Resources.NotByAkatsuki;
             this.BannerMessageBox.Location = new System.Drawing.Point(9, 83);
             this.BannerMessageBox.Name = "BannerMessageBox";
             this.BannerMessageBox.Size = new System.Drawing.Size(304, 47);
@@ -183,7 +197,7 @@
             this.InfoText.Name = "InfoText";
             this.InfoText.Size = new System.Drawing.Size(304, 47);
             this.InfoText.TabIndex = 6;
-            this.InfoText.Text = "PatcherPlus is not owned by Akatsuki. Click to know more.";
+            this.InfoText.Text = "PatcherPlus is not owned by PatcherPlus. Click to know more.";
             this.InfoText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.InfoText.Click += new System.EventHandler(this.InfoText_Click);
             // 
@@ -211,14 +225,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 60);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(463, 2);
+            this.panel1.Size = new System.Drawing.Size(463, 4);
             this.panel1.TabIndex = 6;
             // 
             // LogoBox
             // 
             this.LogoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LogoBox.Image = global::Akatsuki.Loader.Properties.Resources.AkatsukiLogoLowRes;
+            this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.AkatsukiLogoLowRes;
             this.LogoBox.Location = new System.Drawing.Point(0, 68);
             this.LogoBox.Name = "LogoBox";
             this.LogoBox.Size = new System.Drawing.Size(463, 86);
@@ -232,7 +246,7 @@
             this.TitleText.Dock = System.Windows.Forms.DockStyle.Top;
             this.TitleText.Font = new System.Drawing.Font("Arial", 26F);
             this.TitleText.ForeColor = System.Drawing.Color.White;
-            this.TitleText.Image = global::Akatsuki.Loader.Properties.Resources.TriangleTop;
+            this.TitleText.Image = global::PatcherPlus.Loader.Properties.Resources.TriangleTop;
             this.TitleText.Location = new System.Drawing.Point(0, 0);
             this.TitleText.Margin = new System.Windows.Forms.Padding(0);
             this.TitleText.Name = "TitleText";
@@ -247,19 +261,6 @@
             this.FadeInAnimation.Enabled = true;
             this.FadeInAnimation.Interval = 2;
             this.FadeInAnimation.Tick += new System.EventHandler(this.FadeInAnimation_Tick);
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.label1.ForeColor = System.Drawing.Color.Gray;
-            this.label1.Location = new System.Drawing.Point(9, 54);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(304, 26);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "This tool is not compatible with osu!(lazer).";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -310,6 +311,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox BannerMessageBox;
         private System.Windows.Forms.Timer FadeInAnimation;
-        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label BannerMessageText;
     }
 }

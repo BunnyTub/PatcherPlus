@@ -1,4 +1,4 @@
-﻿namespace Akatsuki.Loader
+﻿namespace PatcherPlus.Loader
 {
     partial class WonkyForm
     {
@@ -50,7 +50,7 @@
             this.TitleText.Dock = System.Windows.Forms.DockStyle.Top;
             this.TitleText.Font = new System.Drawing.Font("Arial", 26F);
             this.TitleText.ForeColor = System.Drawing.Color.White;
-            this.TitleText.Image = global::Akatsuki.Loader.Properties.Resources.TriangleTop;
+            this.TitleText.Image = global::PatcherPlus.Loader.Properties.Resources.TriangleTop;
             this.TitleText.Location = new System.Drawing.Point(0, 0);
             this.TitleText.Margin = new System.Windows.Forms.Padding(0);
             this.TitleText.Name = "TitleText";

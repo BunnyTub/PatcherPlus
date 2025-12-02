@@ -1,4 +1,4 @@
-﻿namespace Akatsuki.Loader
+﻿namespace PatcherPlus.Loader
 {
     partial class StartupForm
     {
@@ -73,7 +73,7 @@
             // 
             // IconBox
             // 
-            this.IconBox.Image = global::Akatsuki.Loader.Properties.Resources.bunnyblep;
+            this.IconBox.Image = global::PatcherPlus.Loader.Properties.Resources.bunnyblep;
             this.IconBox.Location = new System.Drawing.Point(8, 8);
             this.IconBox.Margin = new System.Windows.Forms.Padding(0);
             this.IconBox.Name = "IconBox";

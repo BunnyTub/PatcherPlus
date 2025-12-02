@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public partial class GameOptionsForm : Form
     {

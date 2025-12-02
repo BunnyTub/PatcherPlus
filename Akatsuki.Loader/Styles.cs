@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     internal class Styles
     {

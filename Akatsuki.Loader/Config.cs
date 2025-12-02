@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
 	public class Config : BaseConfig
 	{

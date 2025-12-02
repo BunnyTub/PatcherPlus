@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
+    // this is meant to be obsfucated to prevent people from trying to inject custom files, it probably will only work against script kiddies lmao
+
 #pragma warning disable IDE1006 // Naming Styles
     internal static class _Trickery
 #pragma warning restore IDE1006 // Naming Styles

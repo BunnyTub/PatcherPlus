@@ -1,4 +1,4 @@
-﻿namespace Akatsuki.Loader.Common
+﻿namespace PatcherPlus.Loader.Common
 {
     public class BranchVersionInfo
     {

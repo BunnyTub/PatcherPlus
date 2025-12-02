@@ -1,9 +1,9 @@
-﻿using Akatsuki.Loader.Properties;
+﻿using PatcherPlus.Loader.Properties;
 using System;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     internal static class Program
     {

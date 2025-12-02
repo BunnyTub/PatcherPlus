@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     internal class WindowMethods
     {

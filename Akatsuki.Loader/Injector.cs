@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public static class Injector
     {
@@ -45,6 +45,8 @@ namespace Akatsuki.Loader
 
         public static Process Inject(string osuPath, byte[] patcherBytes, string filename)
         {
+            int attempts = 0;
+
             LastInjectUpdateOrOperationDetected = false;
             bool ReturnedNullDueToUpdateOrCrucialOperation = false;
 
@@ -74,6 +76,12 @@ namespace Akatsuki.Loader
                 {
                     Log.WriteLog($"Starting osu!... {osuPath}");
 
+                    Program.main.Invoke((MethodInvoker)delegate
+                    {
+                        Program.main.TitleText.Text = $"Applying patch...";
+                        Program.main.TitleText.ForeColor = Color.DarkGray;
+                    });
+
                     Process process = null;
                     if (ReturnedNullDueToUpdateOrCrucialOperation)
                     {
@@ -94,6 +102,7 @@ namespace Akatsuki.Loader
                                             });
 
                                             LastInjectUpdateOrOperationDetected = true;
+                                            attempts = int.MaxValue;
 
                                             //ReturnedNullDueToUpdateOrCrucialOperation = true;
                                             //return null;
@@ -138,6 +147,7 @@ namespace Akatsuki.Loader
                                 });
 
                                 LastInjectUpdateOrOperationDetected = true;
+                                attempts = int.MaxValue;
 
                                 UpdateOrCrucialOperationInProgress = true;
                                 ReturnedNullDueToUpdateOrCrucialOperation = true;
@@ -174,7 +184,7 @@ namespace Akatsuki.Loader
                     {
                         try
                         {
-                            val.Inject(fullPath, "Akatsuki.Patcher.Main", "Initialize");
+                            val.Inject(fullPath, "PatcherPlus.Patcher.Main", "Initialize");
                         }
                         catch (Exception ex)
                         {
@@ -199,7 +209,7 @@ namespace Akatsuki.Loader
                 Program.main.TitleText.ForeColor = Color.Gray;
             });
 
-            for (int i = 0; i < 3; i++)
+            for (attempts = 0; attempts < 3; attempts++)
             {
                 Process process = InjectNow();
 
@@ -209,7 +219,7 @@ namespace Akatsuki.Loader
                 {
                     Program.main.Invoke((MethodInvoker)delegate
                     {
-                        Program.main.TitleText.Text = $"Patching failed... ({i + 1})";
+                        Program.main.TitleText.Text = $"Patching failed... ({attempts + 1})";
                         Program.main.TitleText.ForeColor = Color.DarkGray;
                     });
                 }

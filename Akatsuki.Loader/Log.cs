@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace Akatsuki.Loader
+namespace PatcherPlus.Loader
 {
     public static class Log
     {
@@ -11,7 +11,7 @@ namespace Akatsuki.Loader
         public static void WriteLog(string line)
         {
             Console.WriteLine(line);
-            CurrentLog += $"Version ??? | {DateTimeOffset.UtcNow:R} | {line}" + "\r\n";
+            CurrentLog += $"Version 0 | {DateTimeOffset.UtcNow:R} | {line}" + "\r\n";
         }
 
         public static void DumpLog()
@@ -33,7 +33,7 @@ namespace Akatsuki.Loader
             }
             catch (Exception ex)
             {
-                Log.WriteLog(ex.Message);
+                WriteLog(ex.Message);
                 if (MessageBox.Show($"Log dump failed. {ex.Message}", "PatcherPlus", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry) DumpLog();
             }
         }

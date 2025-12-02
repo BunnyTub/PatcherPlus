@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Akatsuki.Loader.Common
+namespace PatcherPlus.Loader.Common
 {
     public class LoaderUpdates
     {

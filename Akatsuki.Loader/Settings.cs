@@ -1,4 +1,4 @@
-﻿namespace Akatsuki.Loader.Properties {
+﻿namespace PatcherPlus.Loader.Properties {
     
     
     // This class allows you to handle specific events on the settings class:
