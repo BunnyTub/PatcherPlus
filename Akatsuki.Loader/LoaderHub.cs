@@ -97,16 +97,6 @@ namespace PatcherPlus.Loader
                         Thread.Sleep(2000);
                         ForwardWindow("osu!");
                     }).Start();
-                    
-                    new Thread(() =>
-                    {
-                        StartupForm startup = new StartupForm(Resources.PatchLogo);
-                        startup.ShowDialog();
-                        startup.BringToFront();
-                        startup.Dispose();
-                        Thread.Sleep(2000);
-                        ForwardWindow("osu!");
-                    }).Start();
 
                     Program.main.Invoke((MethodInvoker)delegate
                     {
