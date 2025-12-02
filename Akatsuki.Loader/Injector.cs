@@ -136,6 +136,8 @@ namespace PatcherPlus.Loader
 
                         bool UpdateOrCrucialOperationInProgress = false;
 
+                        processModule = getAuth(process);
+
                         foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
                         {
                             if (title.Contains("updater"))
@@ -163,11 +165,9 @@ namespace PatcherPlus.Loader
                             return null;
                         }
 
-                        processModule = getAuth(process);
-
                         if (UpdateOrCrucialOperationInProgress) continue;
 
-                        Thread.Sleep(100);
+                        Thread.Sleep(10);
 
                         if (process.HasExited)
                         {
@@ -179,16 +179,20 @@ namespace PatcherPlus.Loader
                     }
 
                     InjectableProcess val = new InjectableProcess((uint)process.Id);
+                    bool processBits = val.Is64Bit;
+                    Log.WriteLog($"Got injectable process. (if these don't equal, there might be problems | {val.Is64Bit} ... {Environment.Is64BitProcess})");
 
                     while (true)
                     {
                         try
                         {
-                            val.Inject(fullPath, "PatcherPlus.Patcher.Main", "Initialize");
+                            Log.WriteLog("Attempting to patch the osu! process...");
+                            val.Inject(fullPath, "Akatsuki.Patcher.Main", "Initialize"); // don't change this, like ever
+                            Log.WriteLog("If you see this, it should've been patched successfully. (We love large failure rates <3)");
                         }
                         catch (Exception ex)
                         {
-                            Log.WriteLog(ex.Message);
+                            Log.WriteLog($"Could not patch osu! properly due to: {ex.Message}");
                             continue;
                         }
                         break;
@@ -198,7 +202,7 @@ namespace PatcherPlus.Loader
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(ex.Message);
+                    Log.WriteLog($"Could not begin to patch osu! properly due to: {ex.Message}");
                     return null;
                 }
             }
