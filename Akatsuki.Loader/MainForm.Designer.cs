@@ -225,7 +225,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 60);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(463, 4);
+            this.panel1.Size = new System.Drawing.Size(463, 2);
             this.panel1.TabIndex = 6;
             // 
             // LogoBox
