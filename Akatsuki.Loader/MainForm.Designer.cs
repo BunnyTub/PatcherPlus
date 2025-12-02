@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PlayButton = new System.Windows.Forms.Button();
             this.BackgroundProgressBar = new System.Windows.Forms.ProgressBar();
-            this.FadeOut = new System.Windows.Forms.Timer(this.components);
+            this.FadeOut = new System.Windows.Forms.Timer();
             this.OsuLocationText = new System.Windows.Forms.Label();
             this.BottomPanel = new System.Windows.Forms.Panel();
             this.BannerMessageText = new System.Windows.Forms.Label();
@@ -42,12 +41,12 @@
             this.BannerMessageBox = new System.Windows.Forms.PictureBox();
             this.InfoText = new System.Windows.Forms.Label();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
-            this.AutoPatch = new System.Windows.Forms.Timer(this.components);
-            this.CheckButton = new System.Windows.Forms.Timer(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.AutoPatch = new System.Windows.Forms.Timer();
+            this.CheckButton = new System.Windows.Forms.Timer();
+            this.SpacerPanel = new System.Windows.Forms.Panel();
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
-            this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
+            this.FadeInAnimation = new System.Windows.Forms.Timer();
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
@@ -63,7 +62,7 @@
             this.PlayButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PlayButton.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.PlayButton.ForeColor = System.Drawing.Color.Cornsilk;
-            this.PlayButton.Location = new System.Drawing.Point(316, 83);
+            this.PlayButton.Location = new System.Drawing.Point(317, 83);
             this.PlayButton.Name = "PlayButton";
             this.PlayButton.Size = new System.Drawing.Size(135, 47);
             this.PlayButton.TabIndex = 0;
@@ -75,7 +74,7 @@
             // BackgroundProgressBar
             // 
             this.BackgroundProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BackgroundProgressBar.Location = new System.Drawing.Point(316, 83);
+            this.BackgroundProgressBar.Location = new System.Drawing.Point(317, 83);
             this.BackgroundProgressBar.MarqueeAnimationSpeed = 22;
             this.BackgroundProgressBar.Name = "BackgroundProgressBar";
             this.BackgroundProgressBar.Size = new System.Drawing.Size(135, 47);
@@ -93,7 +92,7 @@
             this.OsuLocationText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OsuLocationText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.OsuLocationText.ForeColor = System.Drawing.Color.Orange;
-            this.OsuLocationText.Location = new System.Drawing.Point(9, 154);
+            this.OsuLocationText.Location = new System.Drawing.Point(9, 172);
             this.OsuLocationText.Margin = new System.Windows.Forms.Padding(0);
             this.OsuLocationText.Name = "OsuLocationText";
             this.OsuLocationText.Size = new System.Drawing.Size(445, 44);
@@ -113,9 +112,9 @@
             this.BottomPanel.Controls.Add(this.BannerMessageBox);
             this.BottomPanel.Controls.Add(this.InfoText);
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.BottomPanel.Location = new System.Drawing.Point(0, 201);
+            this.BottomPanel.Location = new System.Drawing.Point(0, 219);
             this.BottomPanel.Name = "BottomPanel";
-            this.BottomPanel.Size = new System.Drawing.Size(463, 142);
+            this.BottomPanel.Size = new System.Drawing.Size(464, 142);
             this.BottomPanel.TabIndex = 4;
             // 
             // BannerMessageText
@@ -137,7 +136,7 @@
             this.ShowPathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ShowPathBox.AutoSize = true;
             this.ShowPathBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ShowPathBox.Location = new System.Drawing.Point(345, 4);
+            this.ShowPathBox.Location = new System.Drawing.Point(346, 4);
             this.ShowPathBox.Name = "ShowPathBox";
             this.ShowPathBox.Size = new System.Drawing.Size(106, 19);
             this.ShowPathBox.TabIndex = 7;
@@ -150,7 +149,7 @@
             this.AutoPatchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AutoPatchBox.AutoSize = true;
             this.AutoPatchBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.AutoPatchBox.Location = new System.Drawing.Point(271, 29);
+            this.AutoPatchBox.Location = new System.Drawing.Point(272, 29);
             this.AutoPatchBox.Name = "AutoPatchBox";
             this.AutoPatchBox.Size = new System.Drawing.Size(180, 19);
             this.AutoPatchBox.TabIndex = 6;
@@ -167,7 +166,7 @@
             this.ChangeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ChangeButton.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.ChangeButton.ForeColor = System.Drawing.Color.Cornsilk;
-            this.ChangeButton.Location = new System.Drawing.Point(316, 54);
+            this.ChangeButton.Location = new System.Drawing.Point(317, 54);
             this.ChangeButton.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.ChangeButton.Name = "ChangeButton";
             this.ChangeButton.Size = new System.Drawing.Size(135, 26);
@@ -219,14 +218,14 @@
             this.CheckButton.Enabled = true;
             this.CheckButton.Tick += new System.EventHandler(this.CheckButton_Tick);
             // 
-            // panel1
+            // SpacerPanel
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 60);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(463, 2);
-            this.panel1.TabIndex = 6;
+            this.SpacerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.SpacerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SpacerPanel.Location = new System.Drawing.Point(0, 60);
+            this.SpacerPanel.Name = "SpacerPanel";
+            this.SpacerPanel.Size = new System.Drawing.Size(464, 4);
+            this.SpacerPanel.TabIndex = 6;
             // 
             // LogoBox
             // 
@@ -235,7 +234,7 @@
             this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.AkatsukiLogoLowRes;
             this.LogoBox.Location = new System.Drawing.Point(0, 68);
             this.LogoBox.Name = "LogoBox";
-            this.LogoBox.Size = new System.Drawing.Size(463, 86);
+            this.LogoBox.Size = new System.Drawing.Size(464, 86);
             this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
@@ -251,7 +250,7 @@
             this.TitleText.Margin = new System.Windows.Forms.Padding(0);
             this.TitleText.Name = "TitleText";
             this.TitleText.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
-            this.TitleText.Size = new System.Drawing.Size(463, 60);
+            this.TitleText.Size = new System.Drawing.Size(464, 60);
             this.TitleText.TabIndex = 1;
             this.TitleText.Text = "Ready to play?";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -267,8 +266,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(463, 343);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(464, 361);
+            this.Controls.Add(this.SpacerPanel);
             this.Controls.Add(this.LogoBox);
             this.Controls.Add(this.TitleText);
             this.Controls.Add(this.BottomPanel);
@@ -308,7 +307,7 @@
         private System.Windows.Forms.Timer CheckButton;
         private System.Windows.Forms.CheckBox ShowPathBox;
         public System.Windows.Forms.Label InfoText;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel SpacerPanel;
         private System.Windows.Forms.PictureBox BannerMessageBox;
         private System.Windows.Forms.Timer FadeInAnimation;
         public System.Windows.Forms.Label BannerMessageText;

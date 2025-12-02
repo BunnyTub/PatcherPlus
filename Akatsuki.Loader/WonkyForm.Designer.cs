@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WonkyForm));
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.SpacerPanel = new System.Windows.Forms.Panel();
             this.TitleText = new System.Windows.Forms.Label();
             this.SubtitleText = new System.Windows.Forms.Label();
             this.ErrorInfoOutput = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // panel1
+            // SpacerPanel
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 60);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(463, 2);
-            this.panel1.TabIndex = 8;
+            this.SpacerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.SpacerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SpacerPanel.Location = new System.Drawing.Point(0, 60);
+            this.SpacerPanel.Name = "SpacerPanel";
+            this.SpacerPanel.Size = new System.Drawing.Size(463, 4);
+            this.SpacerPanel.TabIndex = 8;
             // 
             // TitleText
             // 
@@ -66,7 +66,7 @@
             this.SubtitleText.Dock = System.Windows.Forms.DockStyle.Top;
             this.SubtitleText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.SubtitleText.ForeColor = System.Drawing.Color.Black;
-            this.SubtitleText.Location = new System.Drawing.Point(0, 62);
+            this.SubtitleText.Location = new System.Drawing.Point(0, 64);
             this.SubtitleText.Margin = new System.Windows.Forms.Padding(0);
             this.SubtitleText.Name = "SubtitleText";
             this.SubtitleText.Size = new System.Drawing.Size(463, 56);
@@ -80,12 +80,12 @@
             this.ErrorInfoOutput.BackColor = System.Drawing.Color.White;
             this.ErrorInfoOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ErrorInfoOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorInfoOutput.Location = new System.Drawing.Point(0, 118);
+            this.ErrorInfoOutput.Location = new System.Drawing.Point(0, 120);
             this.ErrorInfoOutput.Multiline = true;
             this.ErrorInfoOutput.Name = "ErrorInfoOutput";
             this.ErrorInfoOutput.ReadOnly = true;
             this.ErrorInfoOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ErrorInfoOutput.Size = new System.Drawing.Size(463, 225);
+            this.ErrorInfoOutput.Size = new System.Drawing.Size(463, 223);
             this.ErrorInfoOutput.TabIndex = 10;
             this.ErrorInfoOutput.WordWrap = false;
             // 
@@ -97,7 +97,7 @@
             this.ClientSize = new System.Drawing.Size(463, 343);
             this.Controls.Add(this.ErrorInfoOutput);
             this.Controls.Add(this.SubtitleText);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.SpacerPanel);
             this.Controls.Add(this.TitleText);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ForeColor = System.Drawing.Color.White;
@@ -115,7 +115,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel SpacerPanel;
         public System.Windows.Forms.Label TitleText;
         public System.Windows.Forms.Label SubtitleText;
         public System.Windows.Forms.TextBox ErrorInfoOutput;

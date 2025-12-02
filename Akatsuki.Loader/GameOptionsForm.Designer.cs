@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameOptionsForm));
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.SpacerPanel = new System.Windows.Forms.Panel();
             this.TitleText = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // panel1
+            // SpacerPanel
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 40);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(304, 2);
-            this.panel1.TabIndex = 8;
+            this.SpacerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.SpacerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SpacerPanel.Location = new System.Drawing.Point(0, 40);
+            this.SpacerPanel.Name = "SpacerPanel";
+            this.SpacerPanel.Size = new System.Drawing.Size(304, 4);
+            this.SpacerPanel.TabIndex = 8;
             // 
             // TitleText
             // 
@@ -64,7 +64,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 48);
+            this.checkBox1.Location = new System.Drawing.Point(12, 50);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(190, 19);
             this.checkBox1.TabIndex = 9;
@@ -90,7 +90,7 @@
             this.ClientSize = new System.Drawing.Size(304, 99);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.SpacerPanel);
             this.Controls.Add(this.TitleText);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ForeColor = System.Drawing.Color.White;
@@ -110,7 +110,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel SpacerPanel;
         public System.Windows.Forms.Label TitleText;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label1;

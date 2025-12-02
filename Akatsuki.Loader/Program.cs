@@ -50,7 +50,7 @@ namespace PatcherPlus.Loader
             Thread.Sleep(2000);
             Closing = true;
             
-            if (!LoaderHub.PatchedSuccessfully) Log.DumpLog();
+            Log.DumpLog();
 
             //if (LoaderHub.PatchedSuccessfully) Application.Run(new GameOptionsForm());
             //Settings.Default.Save();
