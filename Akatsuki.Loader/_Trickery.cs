@@ -6,6 +6,8 @@ using System.Text;
 namespace PatcherPlus.Loader
 {
     // this is meant to be obsfucated to prevent people from trying to inject custom files, it probably will only work against script kiddies lmao
+    
+    // nvm making this open source just defeats the purpose of any of this
 
 #pragma warning disable IDE1006 // Naming Styles
     internal static class _Trickery

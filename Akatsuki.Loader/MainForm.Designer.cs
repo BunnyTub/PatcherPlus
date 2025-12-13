@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PlayButton = new System.Windows.Forms.Button();
             this.BackgroundProgressBar = new System.Windows.Forms.ProgressBar();
-            this.FadeOut = new System.Windows.Forms.Timer();
+            this.FadeOut = new System.Windows.Forms.Timer(this.components);
             this.OsuLocationText = new System.Windows.Forms.Label();
             this.BottomPanel = new System.Windows.Forms.Panel();
             this.BannerMessageText = new System.Windows.Forms.Label();
@@ -41,12 +42,12 @@
             this.BannerMessageBox = new System.Windows.Forms.PictureBox();
             this.InfoText = new System.Windows.Forms.Label();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
-            this.AutoPatch = new System.Windows.Forms.Timer();
-            this.CheckButton = new System.Windows.Forms.Timer();
+            this.AutoPatch = new System.Windows.Forms.Timer(this.components);
+            this.CheckButton = new System.Windows.Forms.Timer(this.components);
             this.SpacerPanel = new System.Windows.Forms.Panel();
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
-            this.FadeInAnimation = new System.Windows.Forms.Timer();
+            this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
@@ -89,13 +90,13 @@
             // 
             // OsuLocationText
             // 
-            this.OsuLocationText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.OsuLocationText.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.OsuLocationText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.OsuLocationText.ForeColor = System.Drawing.Color.Orange;
-            this.OsuLocationText.Location = new System.Drawing.Point(9, 172);
+            this.OsuLocationText.Location = new System.Drawing.Point(0, 175);
             this.OsuLocationText.Margin = new System.Windows.Forms.Padding(0);
             this.OsuLocationText.Name = "OsuLocationText";
-            this.OsuLocationText.Size = new System.Drawing.Size(445, 44);
+            this.OsuLocationText.Size = new System.Drawing.Size(464, 44);
             this.OsuLocationText.TabIndex = 3;
             this.OsuLocationText.Text = "Searching for osu!...";
             this.OsuLocationText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -229,12 +230,11 @@
             // 
             // LogoBox
             // 
-            this.LogoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LogoBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.AkatsukiLogoLowRes;
-            this.LogoBox.Location = new System.Drawing.Point(0, 68);
+            this.LogoBox.Location = new System.Drawing.Point(0, 75);
             this.LogoBox.Name = "LogoBox";
-            this.LogoBox.Size = new System.Drawing.Size(464, 86);
+            this.LogoBox.Size = new System.Drawing.Size(464, 100);
             this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
@@ -270,8 +270,8 @@
             this.Controls.Add(this.SpacerPanel);
             this.Controls.Add(this.LogoBox);
             this.Controls.Add(this.TitleText);
-            this.Controls.Add(this.BottomPanel);
             this.Controls.Add(this.OsuLocationText);
+            this.Controls.Add(this.BottomPanel);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ForeColor = System.Drawing.Color.White;

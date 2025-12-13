@@ -282,7 +282,7 @@ namespace PatcherPlus.Loader
 
         private void BannerMessageText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("osu!(lazer) is NOT the same codebase as osu!(stable or cuttingedge)", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("osu!(lazer) is NOT the same as osu!(stable/beta/cuttingedge). It is a complete rewrite of the game, and thus, does not have the exact same code that can be patched. Consider visiting  https://osu.ppy.sh/wiki/en/Client/Release_stream/Lazer  for a little more information.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
