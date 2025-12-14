@@ -39,18 +39,19 @@
             this.ShowPathBox = new System.Windows.Forms.CheckBox();
             this.AutoPatchBox = new System.Windows.Forms.CheckBox();
             this.ChangeButton = new System.Windows.Forms.Button();
-            this.BannerMessageBox = new System.Windows.Forms.PictureBox();
             this.InfoText = new System.Windows.Forms.Label();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
             this.AutoPatch = new System.Windows.Forms.Timer(this.components);
             this.CheckButton = new System.Windows.Forms.Timer(this.components);
             this.SpacerPanel = new System.Windows.Forms.Panel();
+            this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
-            this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
+            this.BannerMessageBox = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.BottomPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayButton
@@ -131,17 +132,19 @@
             this.BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
             this.BannerMessageText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.BannerMessageText.Click += new System.EventHandler(this.BannerMessageText_Click);
+            this.BannerMessageText.MouseEnter += new System.EventHandler(this.BannerMessageText_MouseEnter);
+            this.BannerMessageText.MouseLeave += new System.EventHandler(this.BannerMessageText_MouseLeave);
             // 
             // ShowPathBox
             // 
             this.ShowPathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ShowPathBox.AutoSize = true;
             this.ShowPathBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ShowPathBox.Location = new System.Drawing.Point(346, 4);
+            this.ShowPathBox.Location = new System.Drawing.Point(332, 4);
             this.ShowPathBox.Name = "ShowPathBox";
-            this.ShowPathBox.Size = new System.Drawing.Size(106, 19);
+            this.ShowPathBox.Size = new System.Drawing.Size(120, 19);
             this.ShowPathBox.TabIndex = 7;
-            this.ShowPathBox.Text = "Show file paths";
+            this.ShowPathBox.Text = "Advanced Display";
             this.ShowPathBox.UseVisualStyleBackColor = true;
             this.ShowPathBox.CheckedChanged += new System.EventHandler(this.ShowPathBox_CheckedChanged);
             // 
@@ -150,11 +153,11 @@
             this.AutoPatchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AutoPatchBox.AutoSize = true;
             this.AutoPatchBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.AutoPatchBox.Location = new System.Drawing.Point(272, 29);
+            this.AutoPatchBox.Location = new System.Drawing.Point(320, 29);
             this.AutoPatchBox.Name = "AutoPatchBox";
-            this.AutoPatchBox.Size = new System.Drawing.Size(180, 19);
+            this.AutoPatchBox.Size = new System.Drawing.Size(132, 19);
             this.AutoPatchBox.TabIndex = 6;
-            this.AutoPatchBox.Text = "Automatically patch on open";
+            this.AutoPatchBox.Text = "Automatic Patching";
             this.AutoPatchBox.UseVisualStyleBackColor = true;
             this.AutoPatchBox.CheckedChanged += new System.EventHandler(this.AutoPatchBox_CheckedChanged);
             // 
@@ -175,17 +178,6 @@
             this.ChangeButton.Text = "Change File Path";
             this.ChangeButton.UseVisualStyleBackColor = false;
             this.ChangeButton.Click += new System.EventHandler(this.ChangeButton_Click);
-            // 
-            // BannerMessageBox
-            // 
-            this.BannerMessageBox.Image = global::PatcherPlus.Loader.Properties.Resources.NotByAkatsuki;
-            this.BannerMessageBox.Location = new System.Drawing.Point(9, 83);
-            this.BannerMessageBox.Name = "BannerMessageBox";
-            this.BannerMessageBox.Size = new System.Drawing.Size(304, 47);
-            this.BannerMessageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.BannerMessageBox.TabIndex = 7;
-            this.BannerMessageBox.TabStop = false;
-            this.BannerMessageBox.Click += new System.EventHandler(this.BannerMessageBox_Click);
             // 
             // InfoText
             // 
@@ -228,16 +220,25 @@
             this.SpacerPanel.Size = new System.Drawing.Size(464, 4);
             this.SpacerPanel.TabIndex = 6;
             // 
+            // FadeInAnimation
+            // 
+            this.FadeInAnimation.Enabled = true;
+            this.FadeInAnimation.Interval = 2;
+            this.FadeInAnimation.Tick += new System.EventHandler(this.FadeInAnimation_Tick);
+            // 
             // LogoBox
             // 
-            this.LogoBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.LogoBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.AkatsukiLogoLowRes;
-            this.LogoBox.Location = new System.Drawing.Point(0, 75);
+            this.LogoBox.Location = new System.Drawing.Point(0, 72);
             this.LogoBox.Name = "LogoBox";
-            this.LogoBox.Size = new System.Drawing.Size(464, 100);
+            this.LogoBox.Size = new System.Drawing.Size(464, 96);
             this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
+            this.LogoBox.Click += new System.EventHandler(this.LogoBox_Click);
+            this.LogoBox.MouseEnter += new System.EventHandler(this.LogoBox_MouseEnter);
+            this.LogoBox.MouseLeave += new System.EventHandler(this.LogoBox_MouseLeave);
             // 
             // TitleText
             // 
@@ -255,11 +256,26 @@
             this.TitleText.Text = "Ready to play?";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // FadeInAnimation
+            // BannerMessageBox
             // 
-            this.FadeInAnimation.Enabled = true;
-            this.FadeInAnimation.Interval = 2;
-            this.FadeInAnimation.Tick += new System.EventHandler(this.FadeInAnimation_Tick);
+            this.BannerMessageBox.Image = global::PatcherPlus.Loader.Properties.Resources.NotByAkatsuki;
+            this.BannerMessageBox.Location = new System.Drawing.Point(9, 83);
+            this.BannerMessageBox.Name = "BannerMessageBox";
+            this.BannerMessageBox.Size = new System.Drawing.Size(304, 47);
+            this.BannerMessageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.BannerMessageBox.TabIndex = 7;
+            this.BannerMessageBox.TabStop = false;
+            this.BannerMessageBox.Click += new System.EventHandler(this.BannerMessageBox_Click);
+            this.BannerMessageBox.MouseEnter += new System.EventHandler(this.BannerMessageBox_MouseEnter);
+            this.BannerMessageBox.MouseLeave += new System.EventHandler(this.BannerMessageBox_MouseLeave);
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 64);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(464, 8);
+            this.panel1.TabIndex = 7;
             // 
             // MainForm
             // 
@@ -267,8 +283,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.ClientSize = new System.Drawing.Size(464, 361);
-            this.Controls.Add(this.SpacerPanel);
             this.Controls.Add(this.LogoBox);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.SpacerPanel);
             this.Controls.Add(this.TitleText);
             this.Controls.Add(this.OsuLocationText);
             this.Controls.Add(this.BottomPanel);
@@ -286,8 +303,8 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.BottomPanel.ResumeLayout(false);
             this.BottomPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -311,5 +328,6 @@
         private System.Windows.Forms.PictureBox BannerMessageBox;
         private System.Windows.Forms.Timer FadeInAnimation;
         public System.Windows.Forms.Label BannerMessageText;
+        private System.Windows.Forms.Panel panel1;
     }
 }

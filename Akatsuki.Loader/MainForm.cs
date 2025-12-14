@@ -284,5 +284,42 @@ namespace PatcherPlus.Loader
         {
             MessageBox.Show("osu!(lazer) is NOT the same as osu!(stable/beta/cuttingedge). It is a complete rewrite of the game, and thus, does not have the exact same code that can be patched. Consider visiting  https://osu.ppy.sh/wiki/en/Client/Release_stream/Lazer  for a little more information.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void BannerMessageBox_MouseEnter(object sender, EventArgs e)
+        {
+            BannerMessageBox.Image = Resources.NotByAkatsukiHover;
+        }
+
+        private void BannerMessageBox_MouseLeave(object sender, EventArgs e)
+        {
+            BannerMessageBox.Image = Resources.NotByAkatsuki;
+        }
+
+        private void BannerMessageText_MouseEnter(object sender, EventArgs e)
+        {
+            BannerMessageText.ForeColor = Color.Silver;
+            BannerMessageText.Text = "Click here to know why it isn't compatible.";
+        }
+
+        private void BannerMessageText_MouseLeave(object sender, EventArgs e)
+        {
+            BannerMessageText.ForeColor = Color.Gray;
+            BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
+        }
+
+        private void LogoBox_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("You will be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void LogoBox_MouseEnter(object sender, EventArgs e)
+        {
+            LogoBox.Height = 100;
+        }
+
+        private void LogoBox_MouseLeave(object sender, EventArgs e)
+        {
+            LogoBox.Height = 96;
+        }
     }
 }
