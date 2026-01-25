@@ -20,19 +20,19 @@ namespace PatcherPlus.Loader
             return string.Concat(pattern.Select((char x) => (x != '?') ? x : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[Random.Next("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".Length)]));
         }
 
-        public static void CleanupPatchers()
-        {
-            foreach (string item in Directory.EnumerateFiles(Path.GetTempPath(), fileNamePattern))
-            {
-                try
-                {
-                    File.Delete(item);
-                }
-                catch
-                {
-                }
-            }
-        }
+        //public static void CleanupPatchers()
+        //{
+        //    foreach (string item in Directory.EnumerateFiles(Path.GetTempPath(), fileNamePattern))
+        //    {
+        //        try
+        //        {
+        //            File.Delete(item);
+        //        }
+        //        catch
+        //        {
+        //        }
+        //    }
+        //}
 
         // can return null, but Framework doesn't support nullable return types
         private static ProcessModule getAuth(Process process)

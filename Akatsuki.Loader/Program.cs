@@ -12,6 +12,8 @@ namespace PatcherPlus.Loader
         public static string OsuExecutablePath = string.Empty;
         public static MainForm main;
         public static bool Closing = false;
+        public static readonly int VersionMajor = 1;
+        public static readonly int VersionMinor = 0;
 
         [STAThread]
         static void Main()

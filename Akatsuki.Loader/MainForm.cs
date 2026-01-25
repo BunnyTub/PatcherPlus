@@ -17,6 +17,7 @@ namespace PatcherPlus.Loader
             //OsuLocationText.Font = Styles.GetFont(0, 11, FontStyle.Regular); // mehh, it gets lower quality the lower the size is (obviously), doesn't look great
             //PlayButton.Font = Styles.GetFont(0, 18, FontStyle.Regular);
             Opacity = 0;
+            LogoBox.Height = 1;
         }
 
         [DllImport("user32.dll")]
@@ -29,7 +30,6 @@ namespace PatcherPlus.Loader
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Injector.CleanupPatchers();
             TitleText.Text = "Ready to play?";
             TitleText.ForeColor = Color.White;
             if (!string.IsNullOrEmpty(Program.OsuExecutablePath))
@@ -56,6 +56,17 @@ namespace PatcherPlus.Loader
 
             AutoPatchBox.Checked = Settings.Default.AutoPatch;
             ShowPathBox.Checked = Settings.Default.ShowPath;
+
+            if (Settings.Default.ShowPath)
+            {
+                AnimateLogo(86);
+            }
+            else
+            {
+                OsuLocationText.Visible = false;
+                AnimateLogo(148);
+            }
+
             IgnoreChanges = false;
         }
 
@@ -147,18 +158,19 @@ namespace PatcherPlus.Loader
                 PlayButton.Visible = true;
             }
 
-            if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Open the game, or click \"Change File Path\".";
-            else OsuLocationText.Text = $"osu! was located. Click play when you're ready!\r\nClick here to see the discovered location.";
+            //if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Open the game, or click \"Change File Path\".";
+            //else OsuLocationText.Text = $"osu! was located. Click play when you're ready!\r\nClick here to see the discovered location.";
+
+            OsuLocationText.Text = $"{path} | Incorrect? Click \"Change File Path\" or open osu!.";
             OsuLocationText.ForeColor = Color.White;
             PlayButton.BackColor = Color.DarkGreen;
-
 
             LastFoundOsu = path;
         }
 
         private void OsuLocationText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"osu! was located: {LastFoundOsu}");
+            MessageBox.Show($"osu! was located: {LastFoundOsu}", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FadeOut_Tick(object sender, EventArgs e)
@@ -210,6 +222,7 @@ namespace PatcherPlus.Loader
         private void AutoPatch_Tick(object sender, EventArgs e)
         {
             AutoPatch.Stop();
+
             if (!IsShiftDown())
             {
                 if (Settings.Default.AutoPatch)
@@ -229,7 +242,7 @@ namespace PatcherPlus.Loader
             Settings.Default.AutoPatch = AutoPatchBox.Checked;
             if (AutoPatchBox.Checked)
             {
-                MessageBox.Show("PatcherPlus will automatically start opening and patching when you open it. To pause this behavior, hold the SHIFT key immediately after you open the program.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("PatcherPlus will automatically start opening and patching the game when you open this tool. To pause this behavior, hold the SHIFT key immediately after you open the program.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -240,7 +253,7 @@ namespace PatcherPlus.Loader
             ChangeButton.Visible = Visibility;
             AutoPatchBox.Visible = Visibility;
             ShowPathBox.Visible = Visibility;
-            OsuLocationText.Visible = Visibility;
+            OsuLocationText.Enabled = Visibility;
         }
 
         private void ShowPathBox_CheckedChanged(object sender, EventArgs e)
@@ -248,15 +261,27 @@ namespace PatcherPlus.Loader
             if (IgnoreChanges) return;
 
             Settings.Default.ShowPath = ShowPathBox.Checked;
+
+            if (Settings.Default.ShowPath)
+            {
+                OsuLocationText.Visible = true;
+                AnimateLogo(86);
+            }
+            else
+            {
+                OsuLocationText.Visible = false;
+                AnimateLogo(148);
+            }
+
             if (ShowPathBox.Checked)
             {
-                MessageBox.Show("PatcherPlus will replace the generic found osu! text with file path information next time changes are made.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show("PatcherPlus will replace the generic found osu! text with file path information next time changes are made.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void InfoText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("PatcherPlus is not owned or officially endorsed by PatcherPlus. PatcherPlus is a modification of the original Akatsuki Patcher, intended as an alternative patcher. This patcher does not modify the patches downloaded from Akatsuki's file hosts. You do not lose or gain any in-game benefits compared to using the official Akatsuki Patcher.\r\n\r\n- BunnyTub\r\n(11/29/2025 | MM/DD/YYYY)", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("PatcherPlus is not owned or officially endorsed by Akatsuki. PatcherPlus is a modification of the original Akatsuki Patcher, intended as an alternative patcher. This patcher does not modify the patches downloaded from Akatsuki's file hosts. You do not lose or gain any in-game benefits compared to using the official Akatsuki Patcher.\r\n\r\n- BunnyTub", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private readonly object FadeObject = new object();
@@ -282,7 +307,7 @@ namespace PatcherPlus.Loader
 
         private void BannerMessageText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("osu!(lazer) is NOT the same as osu!(stable/beta/cuttingedge). It is a complete rewrite of the game, and thus, does not have the exact same code that can be patched. Consider visiting  https://osu.ppy.sh/wiki/en/Client/Release_stream/Lazer  for a little more information.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("osu!(lazer) is NOT the same as osu!(stable/cuttingedge). It is a complete rewrite of the game, and thus, does not have the exact same code that can be patched. Consider visiting  https://osu.ppy.sh/wiki/en/Client/Release_stream/Lazer  for a little more information.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BannerMessageBox_MouseEnter(object sender, EventArgs e)
@@ -309,17 +334,62 @@ namespace PatcherPlus.Loader
 
         private void LogoBox_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("You will be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("You'll be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private int TargetHeight = 32;
+        private const double EaseFactor = 0.12;
+        private const int StopThreshold = 1;
 
         private void LogoBox_MouseEnter(object sender, EventArgs e)
         {
-            LogoBox.Height = 100;
+            //AnimateLogo(78);
         }
 
         private void LogoBox_MouseLeave(object sender, EventArgs e)
         {
-            LogoBox.Height = 96;
+            //AnimateLogo(148);
+        }
+
+        private void AnimateLogo(int targetHeight)
+        {
+            TargetHeight = targetHeight;
+            
+            if (LogoAnimation.Enabled)
+            {
+            }
+            else
+            {
+                LogoAnimation.Enabled = true;
+            }
+        }
+
+        private void LogoAnimation_Tick(object sender, EventArgs e)
+        {
+            if (Opacity < 0.25) return;
+
+            int current = LogoBox.Height;
+            int delta = TargetHeight - current;
+
+            if (Math.Abs(delta) <= StopThreshold)
+            {
+                LogoBox.Height = TargetHeight;
+                LogoAnimation.Enabled = false;
+
+                if (OsuLocationText.ForeColor == Color.Orange)
+                {
+                    AnimateLogo(86);
+                }
+                else
+                {
+                    if (!ShowPathBox.Checked) AnimateLogo(148);
+                }
+
+                return;
+            }
+
+            int step = (int)Math.Ceiling(delta * EaseFactor);
+            LogoBox.Height += step;
         }
     }
 }
