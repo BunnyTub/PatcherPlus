@@ -219,6 +219,8 @@ namespace PatcherPlus.Loader
 
             using (HttpClient client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = true }))
             {
+                client.Timeout = TimeSpan.FromSeconds(10);
+
                 string fullPath = null;
                 string tempPath = Path.GetTempPath() + "paplubun";
 
