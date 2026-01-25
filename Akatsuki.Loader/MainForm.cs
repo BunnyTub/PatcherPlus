@@ -1,6 +1,7 @@
 ﻿using PatcherPlus.Loader.Properties;
 using System;
 using System.Drawing;
+using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -185,7 +186,7 @@ namespace PatcherPlus.Loader
         {
             if (LoaderHub.PatchingInProgress)
             {
-                Console.Beep();
+                SystemSounds.Asterisk.Play();
                 e.Cancel = true;
             }
             else
