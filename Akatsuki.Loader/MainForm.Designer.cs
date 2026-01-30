@@ -72,7 +72,7 @@
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = false;
             this.PlayButton.Visible = false;
-            this.PlayButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlayButton_Click);
+            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
             // 
             // BackgroundProgressBar
             // 

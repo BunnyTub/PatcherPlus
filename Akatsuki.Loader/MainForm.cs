@@ -74,7 +74,7 @@ namespace PatcherPlus.Loader
 
         private bool StartedWithAutoPatching = false;
 
-        private void PlayButton_Click(object sender, MouseEventArgs e)
+        private void PlayButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(Program.OsuExecutablePath))
             {
@@ -229,6 +229,7 @@ namespace PatcherPlus.Loader
             {
                 if (Settings.Default.AutoPatch)
                 {
+                    Log.WriteLog($"Auto patching is enabled. Patching will attempt to begin automatically.");
                     StartedWithAutoPatching = true;
                     PlayButton.PerformClick();
                 }
@@ -406,11 +407,6 @@ namespace PatcherPlus.Loader
             }
 
             MessageBox.Show("You'll be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void PlayButton_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

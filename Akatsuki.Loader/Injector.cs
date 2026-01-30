@@ -39,7 +39,8 @@ namespace PatcherPlus.Loader
         private static ProcessModule GetAuth(Process process)
         {
             if (process.HasExited) Log.WriteLog("osu! exited...?");
-            return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
+            //return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
+            return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault(mod => mod.ModuleName == "osu!auth.dll");
         }
 
         public static bool LastInjectUpdateOrOperationDetected { get; private set; } = false;
