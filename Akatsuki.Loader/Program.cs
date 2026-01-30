@@ -13,7 +13,7 @@ namespace PatcherPlus.Loader
         public static MainForm main;
         public static bool Closing = false;
         public static readonly int VersionMajor = 1;
-        public static readonly int VersionMinor = 0;
+        public static readonly int VersionMinor = 1;
 
         [STAThread]
         static void Main()
