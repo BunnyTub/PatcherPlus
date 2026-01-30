@@ -1,6 +1,7 @@
 ﻿using PatcherPlus.Loader.Properties;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -73,7 +74,7 @@ namespace PatcherPlus.Loader
 
         private bool StartedWithAutoPatching = false;
 
-        private void PlayButton_Click(object sender, EventArgs e)
+        private void PlayButton_Click(object sender, MouseEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(Program.OsuExecutablePath))
             {
@@ -333,11 +334,6 @@ namespace PatcherPlus.Loader
             BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
         }
 
-        private void LogoBox_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("You'll be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
         private int TargetHeight = 32;
         private const double EaseFactor = 0.12;
         private const int StopThreshold = 1;
@@ -391,6 +387,30 @@ namespace PatcherPlus.Loader
 
             int step = (int)Math.Ceiling(delta * EaseFactor);
             LogoBox.Height += step;
+        }
+
+        private void LogoBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (File.Exists(Settings.Default.LastPath))
+                {
+                    DialogResult result = MessageBox.Show($"Clear the cache now?\r\n{Settings.Default.LastPath}", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        File.Delete(Settings.Default.LastPath);
+                    }
+                }
+
+                return;
+            }
+
+            MessageBox.Show("You'll be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

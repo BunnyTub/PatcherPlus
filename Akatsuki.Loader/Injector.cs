@@ -1,4 +1,5 @@
 ﻿using HoLLy.ManagedInjector;
+using PatcherPlus.Loader.Properties;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -11,7 +12,7 @@ namespace PatcherPlus.Loader
 {
     public static class Injector
     {
-        internal const string fileNamePattern = "WaRcHeStSaUcE";
+        internal const string fileNamePattern = "WaRcHeStSaUcE.dll";
 
         private static readonly Random Random = new Random();
 
@@ -35,7 +36,7 @@ namespace PatcherPlus.Loader
         //}
 
         // can return null, but Framework doesn't support nullable return types
-        private static ProcessModule getAuth(Process process)
+        private static ProcessModule GetAuth(Process process)
         {
             if (process.HasExited) Log.WriteLog("osu! exited...?");
             return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
@@ -64,6 +65,7 @@ namespace PatcherPlus.Loader
                 Directory.CreateDirectory(tempPath);
                 string path = fileNamePattern;
                 fullPath = $"{tempPath}\\{path}";
+                Settings.Default.LastPath = fullPath;
 
                 if (!string.IsNullOrWhiteSpace(filename)) fullPath = filename;
                 else if (patcherBytes != null)
@@ -128,8 +130,6 @@ namespace PatcherPlus.Loader
 
                     int num = 0;
 
-//
-
                     ProcessModule processModule = null;
 
                     while (processModule == null)
@@ -138,7 +138,7 @@ namespace PatcherPlus.Loader
 
                         bool UpdateOrCrucialOperationInProgress = false;
 
-                        processModule = getAuth(process);
+                        processModule = GetAuth(process);
 
                         foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
                         {
@@ -184,6 +184,8 @@ namespace PatcherPlus.Loader
                     bool processBits = val.Is64Bit;
                     Log.WriteLog($"Got injectable process. (if these don't equal, there might be problems | {val.Is64Bit} ... {Environment.Is64BitProcess})");
 
+                    int FailureCount = 0;
+
                     while (true)
                     {
                         try
@@ -195,6 +197,8 @@ namespace PatcherPlus.Loader
                         catch (Exception ex)
                         {
                             Log.WriteLog($"Could not patch osu! properly due to: {ex.Message}");
+                            FailureCount++;
+                            if (FailureCount >= 10) throw new Exception($"Could not patch the game after many attempts. {ex.Message}", ex);
                             continue;
                         }
                         break;

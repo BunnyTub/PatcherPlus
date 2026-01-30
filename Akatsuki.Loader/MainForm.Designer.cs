@@ -72,7 +72,7 @@
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = false;
             this.PlayButton.Visible = false;
-            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
+            this.PlayButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlayButton_Click);
             // 
             // BackgroundProgressBar
             // 
@@ -250,7 +250,7 @@
             this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
-            this.LogoBox.Click += new System.EventHandler(this.LogoBox_Click);
+            this.LogoBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LogoBox_MouseClick);
             this.LogoBox.MouseEnter += new System.EventHandler(this.LogoBox_MouseEnter);
             this.LogoBox.MouseLeave += new System.EventHandler(this.LogoBox_MouseLeave);
             // 
