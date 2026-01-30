@@ -11,7 +11,7 @@ namespace PatcherPlus.Loader
         public static void WriteLog(string line)
         {
             Console.WriteLine(line);
-            CurrentLog += $"Version 0 | {DateTimeOffset.UtcNow:R} | {line}" + "\r\n";
+            CurrentLog += $"Version {Program.VersionMajor}.{Program.VersionMinor} | {DateTimeOffset.UtcNow:R} | {line}" + "\r\n";
         }
 
         public static void DumpLog()

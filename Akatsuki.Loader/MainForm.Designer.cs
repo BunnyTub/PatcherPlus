@@ -39,6 +39,7 @@
             this.ShowPathBox = new System.Windows.Forms.CheckBox();
             this.AutoPatchBox = new System.Windows.Forms.CheckBox();
             this.ChangeButton = new System.Windows.Forms.Button();
+            this.BannerMessageBox = new System.Windows.Forms.PictureBox();
             this.InfoText = new System.Windows.Forms.Label();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
             this.AutoPatch = new System.Windows.Forms.Timer(this.components);
@@ -47,11 +48,11 @@
             this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
-            this.BannerMessageBox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.LogoAnimation = new System.Windows.Forms.Timer(this.components);
             this.BottomPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayButton
@@ -71,7 +72,7 @@
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = false;
             this.PlayButton.Visible = false;
-            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
+            this.PlayButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlayButton_Click);
             // 
             // BackgroundProgressBar
             // 
@@ -140,11 +141,11 @@
             this.ShowPathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ShowPathBox.AutoSize = true;
             this.ShowPathBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ShowPathBox.Location = new System.Drawing.Point(332, 4);
+            this.ShowPathBox.Location = new System.Drawing.Point(333, 4);
             this.ShowPathBox.Name = "ShowPathBox";
-            this.ShowPathBox.Size = new System.Drawing.Size(120, 19);
+            this.ShowPathBox.Size = new System.Drawing.Size(119, 19);
             this.ShowPathBox.TabIndex = 7;
-            this.ShowPathBox.Text = "Advanced Display";
+            this.ShowPathBox.Text = "Show Found Path";
             this.ShowPathBox.UseVisualStyleBackColor = true;
             this.ShowPathBox.CheckedChanged += new System.EventHandler(this.ShowPathBox_CheckedChanged);
             // 
@@ -178,6 +179,19 @@
             this.ChangeButton.Text = "Change File Path";
             this.ChangeButton.UseVisualStyleBackColor = false;
             this.ChangeButton.Click += new System.EventHandler(this.ChangeButton_Click);
+            // 
+            // BannerMessageBox
+            // 
+            this.BannerMessageBox.Image = global::PatcherPlus.Loader.Properties.Resources.NotByAkatsuki;
+            this.BannerMessageBox.Location = new System.Drawing.Point(9, 83);
+            this.BannerMessageBox.Name = "BannerMessageBox";
+            this.BannerMessageBox.Size = new System.Drawing.Size(304, 47);
+            this.BannerMessageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.BannerMessageBox.TabIndex = 7;
+            this.BannerMessageBox.TabStop = false;
+            this.BannerMessageBox.Click += new System.EventHandler(this.BannerMessageBox_Click);
+            this.BannerMessageBox.MouseEnter += new System.EventHandler(this.BannerMessageBox_MouseEnter);
+            this.BannerMessageBox.MouseLeave += new System.EventHandler(this.BannerMessageBox_MouseLeave);
             // 
             // InfoText
             // 
@@ -236,7 +250,7 @@
             this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
-            this.LogoBox.Click += new System.EventHandler(this.LogoBox_Click);
+            this.LogoBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LogoBox_MouseClick);
             this.LogoBox.MouseEnter += new System.EventHandler(this.LogoBox_MouseEnter);
             this.LogoBox.MouseLeave += new System.EventHandler(this.LogoBox_MouseLeave);
             // 
@@ -256,19 +270,6 @@
             this.TitleText.Text = "Ready to play?";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // BannerMessageBox
-            // 
-            this.BannerMessageBox.Image = global::PatcherPlus.Loader.Properties.Resources.NotByAkatsuki;
-            this.BannerMessageBox.Location = new System.Drawing.Point(9, 83);
-            this.BannerMessageBox.Name = "BannerMessageBox";
-            this.BannerMessageBox.Size = new System.Drawing.Size(304, 47);
-            this.BannerMessageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.BannerMessageBox.TabIndex = 7;
-            this.BannerMessageBox.TabStop = false;
-            this.BannerMessageBox.Click += new System.EventHandler(this.BannerMessageBox_Click);
-            this.BannerMessageBox.MouseEnter += new System.EventHandler(this.BannerMessageBox_MouseEnter);
-            this.BannerMessageBox.MouseLeave += new System.EventHandler(this.BannerMessageBox_MouseLeave);
-            // 
             // panel1
             // 
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -276,6 +277,11 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(464, 8);
             this.panel1.TabIndex = 7;
+            // 
+            // LogoAnimation
+            // 
+            this.LogoAnimation.Interval = 15;
+            this.LogoAnimation.Tick += new System.EventHandler(this.LogoAnimation_Tick);
             // 
             // MainForm
             // 
@@ -303,8 +309,8 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.BottomPanel.ResumeLayout(false);
             this.BottomPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -329,5 +335,6 @@
         private System.Windows.Forms.Timer FadeInAnimation;
         public System.Windows.Forms.Label BannerMessageText;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Timer LogoAnimation;
     }
 }
