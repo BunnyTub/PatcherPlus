@@ -74,11 +74,26 @@ namespace PatcherPlus.Loader
 
         public static bool PatchedSuccessfully { get; private set; } = false;
 
-        private static void PatcherResponse(byte[] data, string filename)
+        private static void PatcherResponse(Server server, byte[] data, string filename)
         {
             try
             {
-                Process process = Injector.Inject(Program.OsuExecutablePath, data, filename);
+                string type = string.Empty;
+                string method = string.Empty;
+
+                switch (server)
+                {
+                    case Server.Akatsuki:
+                        type = "Akatsuki.Patcher.Main";
+                        method = "Initialize";
+                        break;
+                    case Server.Realistik:
+                        type = "RealistikOsu.Patcher.Main";
+                        method = "Inject";
+                        break;
+                }
+
+                Process process = Injector.Inject(server, Program.OsuExecutablePath, data, filename, type, method);
 
                 if (process != null)
                 {
@@ -147,11 +162,10 @@ namespace PatcherPlus.Loader
             //}
         }
 
-        public static void PatcherRequest(string releaseStream)
+        public static void PatcherRequest(Server server, string releaseStream)
         {
-            PatchingInProgress = true;
-
             BackgroundThreads.Stop();
+            PatchingInProgress = true;
 
             try
             {
@@ -202,18 +216,37 @@ namespace PatcherPlus.Loader
                 Program.main.TitleText.ForeColor = Color.Gray;
             });
 
-            var data = GetPatch(releaseStream);
+            var data = GetPatch(server, releaseStream);
 
-            PatcherResponse(data.data, data.filename);
+            PatcherResponse(server, data.data, data.filename);
 
             PatchingInProgress = false;
         }
 
+        public enum Server
+        {
+            Unknown = 0,
+            Akatsuki = 1,
+            Realistik = 2
+        }
+
         public static bool PatchingInProgress { get; private set; } = false;
 
-        private static (byte[] data, string filename) GetPatch(string branch)
+        private static (byte[] data, string filename) GetPatch(Server server, string branch)
         {
-            var URL = $"https://air_conditioning.akatsuki.gg/patcher/patcher-version?branch={branch}";
+            string URL = string.Empty;
+            
+            switch (server)
+            {
+                case Server.Akatsuki:
+                    URL = $"https://air_conditioning.akatsuki.gg/patcher/patcher-version?branch={branch}";
+                    break;
+                case Server.Realistik:
+                    URL = $"https://ussr.pl/api/v1/patcher/branches/{branch}/patcher/file";
+                    break;
+                default:
+                    return (null, null);
+            }
 
             byte[] data = null;
 

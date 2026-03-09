@@ -42,7 +42,7 @@ namespace PatcherPlus.Loader
             string line;
             while ((line = reader.ReadLine()) != null)
             {
-                string[] array = line.Split(new[] { '=' }, 2, StringSplitOptions.None); 
+                string[] array = line.Split(new[] { '=' }, 2, StringSplitOptions.None);
                 if (array.Length == 2 && dictionary.TryGetValue(array[0], out var value))
                 {
                     object value2 = ReflectConvert.FromString(array[1], value.PropertyType);

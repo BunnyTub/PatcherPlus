@@ -123,6 +123,16 @@ namespace PatcherPlus.Loader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RealistikOsuLogo {
+            get {
+                object obj = ResourceManager.GetObject("RealistikOsuLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap TriangleTop {
             get {
                 object obj = ResourceManager.GetObject("TriangleTop", resourceCulture);

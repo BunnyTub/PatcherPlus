@@ -6,6 +6,7 @@ using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using static PatcherPlus.Loader.LoaderHub;
 
 namespace PatcherPlus.Loader
 {
@@ -69,16 +70,34 @@ namespace PatcherPlus.Loader
                 AnimateLogo(148);
             }
 
+            switch (Settings.Default.CurrentServer.ToLowerInvariant())
+            {
+                case "akatsuki":
+                    server = Server.Akatsuki;
+                    break;
+                case "realistik":
+                    server = Server.Realistik;
+                    break;
+            }
+
             IgnoreChanges = false;
         }
 
         private bool StartedWithAutoPatching = false;
+
+        private Server server = Server.Unknown;
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(Program.OsuExecutablePath))
             {
                 MessageBox.Show("Could not find osu! on your system. Try opening the game, or click the \"Change\" button to browse to the executable.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if (server == Server.Unknown)
+            {
+                MessageBox.Show("Please choose a server to play.\r\nYou can switch servers by double-clicking the middle logo.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -91,8 +110,8 @@ namespace PatcherPlus.Loader
                 Size = new Size(Size.Width, 98);
                 CenterToScreen();
             }
-            //LoaderHub.PatcherRequest(releaseStreams.SelectedValue).Wait();
-            new Thread(() => LoaderHub.PatcherRequest("stable")).Start();
+            //PatcherRequest(releaseStreams.SelectedValue).Wait();
+            new Thread(() => PatcherRequest(server, "stable")).Start();
             //PlayLoading();
         }
 
@@ -406,7 +425,32 @@ namespace PatcherPlus.Loader
                 return;
             }
 
-            MessageBox.Show("You'll be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            switch (server)
+            {
+                default:
+                case Server.Unknown:
+                case Server.Realistik:
+                    server = Server.Akatsuki;
+                    LogoBox.Image = Resources.AkatsukiLogoLowRes;
+                    break;
+                case Server.Akatsuki:
+                    server = Server.Realistik;
+                    LogoBox.Image = Resources.RealistikOsuLogo;
+                    break;
+            }
+
+            MessageBox.Show($"Switched to \"{server}\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            //MessageBox.Show($"You'll be connecting to \"{server}\".\r\nDouble-click the same area to switch servers.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void LogoBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void TitleText_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

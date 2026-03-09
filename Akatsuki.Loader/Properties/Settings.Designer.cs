@@ -82,5 +82,17 @@ namespace PatcherPlus.Loader.Properties {
                 this["LastPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CurrentServer {
+            get {
+                return ((string)(this["CurrentServer"]));
+            }
+            set {
+                this["CurrentServer"] = value;
+            }
+        }
     }
 }

@@ -13,11 +13,13 @@ namespace PatcherPlus.Loader
         public static MainForm main;
         public static bool Closing = false;
         public static readonly int VersionMajor = 1;
-        public static readonly int VersionMinor = 1;
+        public static readonly int VersionMinor = 2;
 
         [STAThread]
         static void Main()
         {
+            // TODO: Implement transparent notifications for auto patching (copy StartupForm and do stuff)
+
             Mutex mutex = new Mutex(false, "AKATSUKI_PATCHER_PLUS_INSANITY");
 
             if (!mutex.WaitOne(0, false))

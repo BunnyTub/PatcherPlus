@@ -46,10 +46,10 @@
             this.CheckButton = new System.Windows.Forms.Timer(this.components);
             this.SpacerPanel = new System.Windows.Forms.Panel();
             this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
-            this.LogoBox = new System.Windows.Forms.PictureBox();
-            this.TitleText = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LogoAnimation = new System.Windows.Forms.Timer(this.components);
+            this.LogoBox = new System.Windows.Forms.PictureBox();
+            this.TitleText = new System.Windows.Forms.Label();
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
@@ -125,7 +125,7 @@
             this.BannerMessageText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BannerMessageText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.BannerMessageText.ForeColor = System.Drawing.Color.Gray;
-            this.BannerMessageText.Location = new System.Drawing.Point(9, 54);
+            this.BannerMessageText.Location = new System.Drawing.Point(10, 54);
             this.BannerMessageText.Margin = new System.Windows.Forms.Padding(0);
             this.BannerMessageText.Name = "BannerMessageText";
             this.BannerMessageText.Size = new System.Drawing.Size(304, 26);
@@ -240,10 +240,23 @@
             this.FadeInAnimation.Interval = 2;
             this.FadeInAnimation.Tick += new System.EventHandler(this.FadeInAnimation_Tick);
             // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 64);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(464, 8);
+            this.panel1.TabIndex = 7;
+            // 
+            // LogoAnimation
+            // 
+            this.LogoAnimation.Interval = 15;
+            this.LogoAnimation.Tick += new System.EventHandler(this.LogoAnimation_Tick);
+            // 
             // LogoBox
             // 
             this.LogoBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.AkatsukiLogoLowRes;
+            this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.bunnyblep;
             this.LogoBox.Location = new System.Drawing.Point(0, 72);
             this.LogoBox.Name = "LogoBox";
             this.LogoBox.Size = new System.Drawing.Size(464, 96);
@@ -251,6 +264,7 @@
             this.LogoBox.TabIndex = 5;
             this.LogoBox.TabStop = false;
             this.LogoBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LogoBox_MouseClick);
+            this.LogoBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LogoBox_MouseDoubleClick);
             this.LogoBox.MouseEnter += new System.EventHandler(this.LogoBox_MouseEnter);
             this.LogoBox.MouseLeave += new System.EventHandler(this.LogoBox_MouseLeave);
             // 
@@ -269,19 +283,7 @@
             this.TitleText.TabIndex = 1;
             this.TitleText.Text = "Ready to play?";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 64);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(464, 8);
-            this.panel1.TabIndex = 7;
-            // 
-            // LogoAnimation
-            // 
-            this.LogoAnimation.Interval = 15;
-            this.LogoAnimation.Tick += new System.EventHandler(this.LogoAnimation_Tick);
+            this.TitleText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TitleText_MouseDoubleClick);
             // 
             // MainForm
             // 
