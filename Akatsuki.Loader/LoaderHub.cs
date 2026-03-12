@@ -49,6 +49,45 @@ namespace PatcherPlus.Loader
         const uint SWP_NOACTIVATE = 0x0010;
         const uint SWP_SHOWWINDOW = 0x0040;
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        const uint SWP_NOZORDER = 0x0004;
+
+        private readonly static Random rnd = new Random();
+
+        public static bool NudgeWindow(string title)
+        {
+            IntPtr hWnd = FindWindow(null, title);
+            if (hWnd == IntPtr.Zero) return false;
+
+            if (!GetWindowRect(hWnd, out RECT rect)) return false;
+
+            int x = rect.Left;
+            int y = rect.Top;
+
+            int direction = rnd.Next(4);
+
+            switch (direction)
+            {
+                case 0: x += 5; break;
+                case 1: x -= 5; break;
+                case 2: y += 5; break;
+                case 3: y -= 5; break;
+            }
+
+            return SetWindowPos(hWnd, IntPtr.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+        }
+
         public static bool HideWindow(string title, bool hide)
         {
             IntPtr hWnd = FindWindow(null, title);
@@ -101,17 +140,25 @@ namespace PatcherPlus.Loader
                     PatchedSuccessfully = true;
 
                     // this is just stylization fun, it's not needed, and I might end up removing it
-                    HideWindow("osu! (loading)", true);
 
                     new Thread(() =>
                     {
-                        StartupForm startup = new StartupForm(Resources.PatchLogo);
-                        startup.ShowDialog();
-                        startup.BringToFront();
-                        startup.Dispose();
-                        Thread.Sleep(2000);
-                        ForwardWindow("osu!");
+                        for (int i = 0; i <= 300; i++)
+                        {
+                            NudgeWindow("osu! (loading)");
+                            Thread.Sleep(25);
+                        }
                     }).Start();
+
+                    //new Thread(() =>
+                    //{
+                    //    StartupForm startup = new StartupForm(Resources.PatchLogo);
+                    //    startup.ShowDialog();
+                    //    startup.BringToFront();
+                    //    startup.Dispose();
+                    //    Thread.Sleep(2000);
+                    //    ForwardWindow("osu!");
+                    //}).Start();
 
                     Program.main.Invoke((MethodInvoker)delegate
                     {
@@ -290,9 +337,12 @@ namespace PatcherPlus.Loader
                     byte[] bytes = File.ReadAllBytes(fullPath);
                     string tricks = _Trickery.Learn(bytes);
 
-                    if (tricks != Settings.Default.KnownTrickery)
+                    if (tricks != Settings.Default.KnownTrickery ||
+                        server.ToString().ToLowerInvariant() != Settings.Default.LastServer.ToLowerInvariant() ||
+                        branch.ToLowerInvariant() != Settings.Default.LastBranch.ToLowerInvariant())
                     {
-                        Log.WriteLog($"Cache mismatch, the file will be deleted. ({tricks} != {Settings.Default.KnownTrickery})");
+                        //Log.WriteLog($"Cache mismatch, the file will be deleted.");
+                        Log.WriteLog($"Cache deletion reason or reasons: {tricks} != {Settings.Default.KnownTrickery} / {server.ToString().ToLowerInvariant()} != {Settings.Default.LastServer.ToLowerInvariant()} / {branch.ToLowerInvariant()} != {Settings.Default.LastBranch.ToLowerInvariant()}");
 
                         Program.main.Invoke((MethodInvoker)delegate
                         {

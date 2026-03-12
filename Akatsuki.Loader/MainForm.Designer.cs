@@ -40,7 +40,6 @@
             this.AutoPatchBox = new System.Windows.Forms.CheckBox();
             this.ChangeButton = new System.Windows.Forms.Button();
             this.BannerMessageBox = new System.Windows.Forms.PictureBox();
-            this.InfoText = new System.Windows.Forms.Label();
             this.OpenOsuExeFileWindow = new System.Windows.Forms.OpenFileDialog();
             this.AutoPatch = new System.Windows.Forms.Timer(this.components);
             this.CheckButton = new System.Windows.Forms.Timer(this.components);
@@ -50,6 +49,7 @@
             this.LogoAnimation = new System.Windows.Forms.Timer(this.components);
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
+            this.EnableOsuCoinsBox = new System.Windows.Forms.CheckBox();
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogoBox)).BeginInit();
@@ -106,14 +106,14 @@
             // 
             // BottomPanel
             // 
-            this.BottomPanel.Controls.Add(this.BannerMessageText);
+            this.BottomPanel.Controls.Add(this.EnableOsuCoinsBox);
             this.BottomPanel.Controls.Add(this.ShowPathBox);
             this.BottomPanel.Controls.Add(this.AutoPatchBox);
             this.BottomPanel.Controls.Add(this.ChangeButton);
             this.BottomPanel.Controls.Add(this.PlayButton);
             this.BottomPanel.Controls.Add(this.BackgroundProgressBar);
             this.BottomPanel.Controls.Add(this.BannerMessageBox);
-            this.BottomPanel.Controls.Add(this.InfoText);
+            this.BottomPanel.Controls.Add(this.BannerMessageText);
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.BottomPanel.Location = new System.Drawing.Point(0, 219);
             this.BottomPanel.Name = "BottomPanel";
@@ -125,10 +125,10 @@
             this.BannerMessageText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BannerMessageText.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.BannerMessageText.ForeColor = System.Drawing.Color.Gray;
-            this.BannerMessageText.Location = new System.Drawing.Point(10, 54);
+            this.BannerMessageText.Location = new System.Drawing.Point(9, 104);
             this.BannerMessageText.Margin = new System.Windows.Forms.Padding(0);
             this.BannerMessageText.Name = "BannerMessageText";
-            this.BannerMessageText.Size = new System.Drawing.Size(304, 26);
+            this.BannerMessageText.Size = new System.Drawing.Size(305, 26);
             this.BannerMessageText.TabIndex = 7;
             this.BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
             this.BannerMessageText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -192,20 +192,6 @@
             this.BannerMessageBox.Click += new System.EventHandler(this.BannerMessageBox_Click);
             this.BannerMessageBox.MouseEnter += new System.EventHandler(this.BannerMessageBox_MouseEnter);
             this.BannerMessageBox.MouseLeave += new System.EventHandler(this.BannerMessageBox_MouseLeave);
-            // 
-            // InfoText
-            // 
-            this.InfoText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.InfoText.Font = new System.Drawing.Font("Montserrat", 14F);
-            this.InfoText.ForeColor = System.Drawing.Color.Cornsilk;
-            this.InfoText.Location = new System.Drawing.Point(9, 83);
-            this.InfoText.Margin = new System.Windows.Forms.Padding(0);
-            this.InfoText.Name = "InfoText";
-            this.InfoText.Size = new System.Drawing.Size(304, 47);
-            this.InfoText.TabIndex = 6;
-            this.InfoText.Text = "PatcherPlus is not owned by PatcherPlus. Click to know more.";
-            this.InfoText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.InfoText.Click += new System.EventHandler(this.InfoText_Click);
             // 
             // OpenOsuExeFileWindow
             // 
@@ -285,6 +271,19 @@
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.TitleText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TitleText_MouseDoubleClick);
             // 
+            // EnableOsuCoinsBox
+            // 
+            this.EnableOsuCoinsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.EnableOsuCoinsBox.AutoSize = true;
+            this.EnableOsuCoinsBox.Location = new System.Drawing.Point(9, 58);
+            this.EnableOsuCoinsBox.Name = "EnableOsuCoinsBox";
+            this.EnableOsuCoinsBox.Size = new System.Drawing.Size(94, 19);
+            this.EnableOsuCoinsBox.TabIndex = 8;
+            this.EnableOsuCoinsBox.Text = "Enable Coins";
+            this.EnableOsuCoinsBox.UseVisualStyleBackColor = true;
+            this.EnableOsuCoinsBox.Visible = false;
+            this.EnableOsuCoinsBox.CheckedChanged += new System.EventHandler(this.EnableOsuCoinsBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -331,12 +330,12 @@
         private System.Windows.Forms.CheckBox AutoPatchBox;
         private System.Windows.Forms.Timer CheckButton;
         private System.Windows.Forms.CheckBox ShowPathBox;
-        public System.Windows.Forms.Label InfoText;
         private System.Windows.Forms.Panel SpacerPanel;
         private System.Windows.Forms.PictureBox BannerMessageBox;
         private System.Windows.Forms.Timer FadeInAnimation;
         public System.Windows.Forms.Label BannerMessageText;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer LogoAnimation;
+        private System.Windows.Forms.CheckBox EnableOsuCoinsBox;
     }
 }

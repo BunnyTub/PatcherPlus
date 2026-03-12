@@ -70,13 +70,13 @@ namespace PatcherPlus.Loader
                 AnimateLogo(148);
             }
 
-            switch (Settings.Default.CurrentServer.ToLowerInvariant())
+            switch (Settings.Default.LastServer.ToLowerInvariant())
             {
                 case "akatsuki":
-                    server = Server.Akatsuki;
+                    CurrentServer = Server.Akatsuki;
                     break;
                 case "realistik":
-                    server = Server.Realistik;
+                    CurrentServer = Server.Realistik;
                     break;
             }
 
@@ -85,7 +85,28 @@ namespace PatcherPlus.Loader
 
         private bool StartedWithAutoPatching = false;
 
-        private Server server = Server.Unknown;
+        private Server _server = Server.Unknown;
+        private Server CurrentServer
+        {
+            get
+            {
+                return _server;
+            }
+            set
+            {
+                _server = value;
+
+                if (value == Server.Realistik)
+                {
+                    EnableOsuCoinsBox.Visible = true;
+                }
+                else
+                {
+                    EnableOsuCoinsBox.Visible = false;
+                }
+            }
+        }
+        private string CurrentStream = "stable";
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
@@ -95,9 +116,9 @@ namespace PatcherPlus.Loader
                 return;
             }
 
-            if (server == Server.Unknown)
+            if (CurrentServer == Server.Unknown)
             {
-                MessageBox.Show("Please choose a server to play.\r\nYou can switch servers by double-clicking the middle logo.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please choose a server to play.\r\nYou can switch servers by clicking the bunny.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -110,8 +131,10 @@ namespace PatcherPlus.Loader
                 Size = new Size(Size.Width, 98);
                 CenterToScreen();
             }
-            //PatcherRequest(releaseStreams.SelectedValue).Wait();
-            new Thread(() => PatcherRequest(server, "stable")).Start();
+
+            if (CurrentServer == Server.Realistik) if (EnableOsuCoinsBox.Checked) CurrentStream = "coins";
+            else CurrentStream = "stable";
+            new Thread(() => PatcherRequest(CurrentServer, CurrentStream)).Start();
             //PlayLoading();
         }
 
@@ -170,7 +193,7 @@ namespace PatcherPlus.Loader
             //    PatcherPlus.Loader.Config.Save(Config);
             //}
 
-            if (LoaderHub.PatchingInProgress)
+            if (PatchingInProgress)
             {
             }
             else
@@ -204,14 +227,17 @@ namespace PatcherPlus.Loader
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (LoaderHub.PatchingInProgress)
+            if (PatchingInProgress)
             {
                 SystemSounds.Asterisk.Play();
-                e.Cancel = true;
+                DialogResult question = MessageBox.Show("Closing while patching may cause problems.\r\nAre you sure you want to close PatcherPlus?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (question != DialogResult.Yes) e.Cancel = true;
             }
             else
             {
                 BackgroundThreads.Stop();
+                Settings.Default.LastServer = CurrentServer.ToString();
+                Settings.Default.LastBranch = CurrentStream;
             }
             Settings.Default.Save();
         }
@@ -425,21 +451,21 @@ namespace PatcherPlus.Loader
                 return;
             }
 
-            switch (server)
+            switch (CurrentServer)
             {
                 default:
                 case Server.Unknown:
                 case Server.Realistik:
-                    server = Server.Akatsuki;
+                    CurrentServer = Server.Akatsuki;
                     LogoBox.Image = Resources.AkatsukiLogoLowRes;
                     break;
                 case Server.Akatsuki:
-                    server = Server.Realistik;
+                    CurrentServer = Server.Realistik;
                     LogoBox.Image = Resources.RealistikOsuLogo;
                     break;
             }
 
-            MessageBox.Show($"Switched to \"{server}\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Switched to \"{CurrentServer}\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             //MessageBox.Show($"You'll be connecting to \"{server}\".\r\nDouble-click the same area to switch servers.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -451,6 +477,18 @@ namespace PatcherPlus.Loader
         private void TitleText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void EnableOsuCoinsBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (EnableOsuCoinsBox.Checked)
+            {
+                MessageBox.Show("You will gain and lose coins while you play.\r\n\r\n" +
+                    "- Playing any ranked map costs 1 coin.\r\n" +
+                    "- Gaining 100 combo awards 1 coin (200 combo with Relax/Autopilot).\r\n" +
+                    "- Passing a ranked map awards 1 coin.\r\n\r\n" +
+                    "You can change coin settings in osu! options.");
+            }
         }
     }
 }

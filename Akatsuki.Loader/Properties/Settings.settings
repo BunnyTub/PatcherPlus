@@ -17,7 +17,10 @@
     <Setting Name="LastPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="CurrentServer" Type="System.String" Scope="User">
+    <Setting Name="LastServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastBranch" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

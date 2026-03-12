@@ -86,12 +86,24 @@ namespace PatcherPlus.Loader.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CurrentServer {
+        public string LastServer {
             get {
-                return ((string)(this["CurrentServer"]));
+                return ((string)(this["LastServer"]));
             }
             set {
-                this["CurrentServer"] = value;
+                this["LastServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastBranch {
+            get {
+                return ((string)(this["LastBranch"]));
+            }
+            set {
+                this["LastBranch"] = value;
             }
         }
     }
