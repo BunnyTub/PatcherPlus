@@ -97,7 +97,7 @@ namespace PatcherPlus.Loader
                                 {
                                     foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
                                     {
-                                        if (title.Contains("updater"))
+                                        if (title.ToLowerInvariant().Contains("update"))
                                         {
                                             Program.main.Invoke((MethodInvoker)delegate
                                             {
@@ -162,7 +162,7 @@ namespace PatcherPlus.Loader
 
                         foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
                         {
-                            if (title.Contains("updater"))
+                            if (title.Contains("update"))
                             {
                                 Program.main.Invoke((MethodInvoker)delegate
                                 {

@@ -146,7 +146,7 @@ namespace PatcherPlus.Loader
                         for (int i = 0; i <= 300; i++)
                         {
                             NudgeWindow("osu! (loading)");
-                            Thread.Sleep(25);
+                            Thread.Sleep(30);
                         }
                     }).Start();
 
@@ -212,7 +212,6 @@ namespace PatcherPlus.Loader
         public static void PatcherRequest(Server server, string releaseStream)
         {
             BackgroundThreads.Stop();
-            PatchingInProgress = true;
 
             try
             {
@@ -265,6 +264,36 @@ namespace PatcherPlus.Loader
 
             var data = GetPatch(server, releaseStream);
 
+            string require = Path.GetDirectoryName(Program.OsuExecutablePath) + "\\.require_update";
+            string pending = Path.GetDirectoryName(Program.OsuExecutablePath) + "\\_pending";
+
+            if (File.Exists(require) || Directory.Exists(pending))
+            {
+                DialogResult question = DialogResult.No;
+
+                Program.main.Invoke((MethodInvoker)delegate
+                {
+                    Program.main.TitleText.Text = "Patching paused.";
+                    Program.main.TitleText.ForeColor = Color.Yellow;
+                    question = MessageBox.Show("PatcherPlus found that osu! needs need to update or repair itself. Do you want to try bypassing this and continue?", Program.main.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                });
+
+                if (question != DialogResult.Yes)
+                {
+                    Program.main.Invoke((MethodInvoker)delegate
+                    {
+                        Program.main.TitleText.Text = "Patching stopped.";
+                        Program.main.TitleText.ForeColor = Color.Yellow;
+                    });
+
+                    PatchingInProgress = false;
+                    return;
+                }
+
+                if (File.Exists(require)) File.Delete(require);
+                if (Directory.Exists(pending)) Directory.Delete(pending, true);
+            }
+
             PatcherResponse(server, data.data, data.filename);
 
             PatchingInProgress = false;
@@ -277,7 +306,24 @@ namespace PatcherPlus.Loader
             Realistik = 2
         }
 
-        public static bool PatchingInProgress { get; private set; } = false;
+        private static bool _PatchingInProgress = false;
+        public static bool PatchingInProgress
+        {
+            get
+            {
+                return _PatchingInProgress;
+            }
+            set
+            {
+                _PatchingInProgress = value;
+                Program.main.Invoke((MethodInvoker)delegate
+                {
+                    Program.main.BottomPanel.Enabled = !value;
+                    if (value) Program.main.BackgroundProgressBar.BringToFront();
+                    else Program.main.BackgroundProgressBar.SendToBack();
+                });
+            }
+        }
 
         private static (byte[] data, string filename) GetPatch(Server server, string branch)
         {

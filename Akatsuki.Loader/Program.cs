@@ -18,8 +18,6 @@ namespace PatcherPlus.Loader
         [STAThread]
         static void Main()
         {
-            // TODO: Implement transparent notifications for auto patching (copy StartupForm and do stuff)
-
             Mutex mutex = new Mutex(false, "AKATSUKI_PATCHER_PLUS_INSANITY");
 
             if (!mutex.WaitOne(0, false))
