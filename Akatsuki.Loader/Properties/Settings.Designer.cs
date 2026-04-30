@@ -82,5 +82,29 @@ namespace PatcherPlus.Loader.Properties {
                 this["LastPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastServer {
+            get {
+                return ((string)(this["LastServer"]));
+            }
+            set {
+                this["LastServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastBranch {
+            get {
+                return ((string)(this["LastBranch"]));
+            }
+            set {
+                this["LastBranch"] = value;
+            }
+        }
     }
 }

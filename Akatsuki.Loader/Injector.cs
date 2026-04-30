@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using static PatcherPlus.Loader.LoaderHub;
 
 namespace PatcherPlus.Loader
 {
@@ -39,12 +40,13 @@ namespace PatcherPlus.Loader
         private static ProcessModule GetAuth(Process process)
         {
             if (process.HasExited) Log.WriteLog("osu! exited...?");
-            return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
+            //return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault((ProcessModule mod) => mod.ModuleName == "osu!auth.dll");
+            return (Process.GetProcessById(process.Id)?.Modules).Cast<ProcessModule>().FirstOrDefault(mod => mod.ModuleName == "osu!auth.dll");
         }
 
         public static bool LastInjectUpdateOrOperationDetected { get; private set; } = false;
 
-        public static Process Inject(string osuPath, byte[] patcherBytes, string filename)
+        public static Process Inject(Server server, string osuPath, byte[] patcherBytes, string filename, string typeName, string methodName)
         {
             int attempts = 0;
 
@@ -95,7 +97,7 @@ namespace PatcherPlus.Loader
                                 {
                                     foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
                                     {
-                                        if (title.Contains("updater"))
+                                        if (title.ToLowerInvariant().Contains("update"))
                                         {
                                             Program.main.Invoke((MethodInvoker)delegate
                                             {
@@ -124,7 +126,23 @@ namespace PatcherPlus.Loader
                         }
                         process = new Process();
                     }
-                    else process = Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = osuPath, Arguments = "-devserver akatsuki.gg" });
+                    else
+                    {
+                        string DevAddress = string.Empty;
+
+                        switch (server)
+                        {
+                            case Server.Akatsuki:
+                                DevAddress = "akatsuki.gg";
+                                break;
+                            case Server.Realistik:
+                                DevAddress = "ussr.pl";
+                                break;
+                        }
+
+                        process = Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = osuPath, Arguments = $"-devserver {DevAddress}" });
+                        //process = Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = osuPath, Arguments = "-devserver akatsuki.gg" });
+                    }
 
                     ReturnedNullDueToUpdateOrCrucialOperation = false;
 
@@ -136,13 +154,15 @@ namespace PatcherPlus.Loader
                     {
                         Log.WriteLog($"Waiting for osu!... ({num})");
 
+                        process.Refresh();
+
                         bool UpdateOrCrucialOperationInProgress = false;
 
                         processModule = GetAuth(process);
 
                         foreach (var (handle, title) in WindowMethods.GetProcessWindows(process))
                         {
-                            if (title.Contains("updater"))
+                            if (title.Contains("update"))
                             {
                                 Program.main.Invoke((MethodInvoker)delegate
                                 {
@@ -163,7 +183,6 @@ namespace PatcherPlus.Loader
                         {
                             Log.WriteLog($"Failed to patch the osu! client because the wait to verify loaded resources took too long.");
                             if (!process.HasExited) process?.Kill();
-                            //MessageBox.Show("Failed loading Akatsuki Patcher.\nPlease make sure you're running the latest osu! or relocate/repair your osu! install.");
                             return null;
                         }
 
@@ -182,7 +201,16 @@ namespace PatcherPlus.Loader
 
                     InjectableProcess val = new InjectableProcess((uint)process.Id);
                     bool processBits = val.Is64Bit;
-                    Log.WriteLog($"Got injectable process. (if these don't equal, there might be problems | {val.Is64Bit} ... {Environment.Is64BitProcess})");
+                    Log.WriteLog($"Got injectable process.");
+
+                    if (val.GetStatus() != ProcessStatus.Ok)
+                    {
+                        process.Kill();
+                        Log.WriteLog($"Process had bad status.");
+                        throw new Exception("Could not patch the game due to an internal issue.");
+                    }
+
+                    int FailureCount = 0;
 
                     int FailureCount = 0;
 
@@ -190,8 +218,10 @@ namespace PatcherPlus.Loader
                     {
                         try
                         {
+                            Log.WriteLog("Waiting for CLR to be available.");
+                            if (!process.Modules.Cast<ProcessModule>().Any((ProcessModule pm) => pm.FileName.EndsWith("clr.dll"))) continue;
                             Log.WriteLog("Attempting to patch the osu! process...");
-                            val.Inject(fullPath, "Akatsuki.Patcher.Main", "Initialize"); // don't change this, like ever
+                            val.Inject(fullPath, typeName, methodName); // don't change this, like ever
                             Log.WriteLog("If you see this, it should've been patched successfully. (We love large failure rates <3)");
                         }
                         catch (Exception ex)

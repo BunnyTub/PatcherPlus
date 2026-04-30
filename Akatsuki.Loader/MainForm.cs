@@ -6,6 +6,7 @@ using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using static PatcherPlus.Loader.LoaderHub;
 
 namespace PatcherPlus.Loader
 {
@@ -16,6 +17,7 @@ namespace PatcherPlus.Loader
             InitializeComponent();
             Styles.AddMemoryFont(Resources.Montserrat_Regular);
             TitleText.Font = Styles.GetFont(0, 26, FontStyle.Regular);
+            OsuServerText.Font = Styles.GetFont(0, 11, FontStyle.Regular);
             //OsuLocationText.Font = Styles.GetFont(0, 11, FontStyle.Regular); // mehh, it gets lower quality the lower the size is (obviously), doesn't look great
             //PlayButton.Font = Styles.GetFont(0, 18, FontStyle.Regular);
             Opacity = 0;
@@ -28,6 +30,27 @@ namespace PatcherPlus.Loader
         private bool IsShiftDown()
         {
             return (GetAsyncKeyState(Keys.ShiftKey) & 0x8000) != 0;
+        }
+
+        private bool _ShowMore = false;
+        private bool ShowMore
+        {
+            get
+            {
+                return _ShowMore;
+            }
+            set
+            {
+                _ShowMore = value;
+                if (value)
+                {
+                    ShowMoreButton.Text = "Less";
+                }
+                else
+                {
+                    ShowMoreButton.Text = "More";
+                }
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -51,17 +74,16 @@ namespace PatcherPlus.Loader
                 }
                 else
                 {
-                    PlayButton.Enabled = true;
-                    PlayButton.Visible = true;
                 }
             }
 
             AutoPatchBox.Checked = Settings.Default.AutoPatch;
-            ShowPathBox.Checked = Settings.Default.ShowPath;
+            ShowMore = Settings.Default.ShowPath;
 
-            if (Settings.Default.ShowPath)
+            if (ShowMore)
             {
-                AnimateLogo(86);
+                OsuLocationText.Visible = true;
+                AnimateLogo(96);
             }
             else
             {
@@ -69,30 +91,91 @@ namespace PatcherPlus.Loader
                 AnimateLogo(148);
             }
 
+            switch (Settings.Default.LastServer.ToLowerInvariant())
+            {
+                case "akatsuki":
+                    CurrentServer = Server.Akatsuki;
+                    break;
+                case "realistik":
+                    CurrentServer = Server.Realistik;
+                    break;
+            }
+
             IgnoreChanges = false;
         }
 
         private bool StartedWithAutoPatching = false;
 
-        private void PlayButton_Click(object sender, MouseEventArgs e)
+        private void RevealServerOptions()
         {
+            if (_server == Server.Realistik)
+            {
+                EnableOsuCoinsBox.Visible = true;
+                NoAdditionalOptionsText.Visible = false;
+            }
+            else
+            {
+                EnableOsuCoinsBox.Visible = false;
+                NoAdditionalOptionsText.Visible = true;
+            }
+        }
+
+        private Server _server = Server.Unknown;
+        private Server CurrentServer
+        {
+            get
+            {
+                return _server;
+            }
+            set
+            {
+                _server = value;
+
+                switch (value)
+                {
+                    case Server.Akatsuki:
+                        LogoBox.Image = Resources.AkatsukiLogoLowRes;
+                        break;
+                    case Server.Realistik:
+                        LogoBox.Image = Resources.RealistikOsuLogo;
+                        break;
+                }
+
+                OsuServerText.Text = value.ToString();
+                RevealServerOptions();
+            }
+        }
+
+        private string CurrentStream = "stable";
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            if (PatchingInProgress) return;
+            PatchingInProgress = true;
+
             if (string.IsNullOrWhiteSpace(Program.OsuExecutablePath))
             {
                 MessageBox.Show("Could not find osu! on your system. Try opening the game, or click the \"Change\" button to browse to the executable.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            PlayButton.Enabled = false;
-            PlayButton.Visible = false;
-            TitleText.Text = "Launching...";
+            if (CurrentServer == Server.Unknown)
+            {
+                MessageBox.Show("Please choose a server to play.\r\nYou can switch servers by clicking the bunny.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            TitleText.Text = "Please wait...";
             TitleText.ForeColor = Color.Gray;
             if (StartedWithAutoPatching)
             {
                 Size = new Size(Size.Width, 98);
                 CenterToScreen();
             }
-            //LoaderHub.PatcherRequest(releaseStreams.SelectedValue).Wait();
-            new Thread(() => LoaderHub.PatcherRequest("stable")).Start();
+
+            if (CurrentServer == Server.Realistik) if (EnableOsuCoinsBox.Checked) CurrentStream = "coins";
+            else CurrentStream = "stable";
+            new Thread(() => PatcherRequest(CurrentServer, CurrentStream)).Start();
             //PlayLoading();
         }
 
@@ -104,15 +187,13 @@ namespace PatcherPlus.Loader
             {
                 TitleText.Text = "osu! update required.";
                 TitleText.ForeColor = Color.Maroon;
-                PlayButton.Enabled = true;
-                PlayButton.Visible = true;
+                BottomPanel.Enabled = true;
 
                 Log.WriteLog("osu! may be updating, so it wasn't patched properly.");
 
                 if (MessageBox.Show("Looks like osu! was/is updating, so patching stopped.\r\nDo you want to start patching again?\r\n\r\n(Ensure that osu! isn't updating before continuing!)", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    PlayButton.Enabled = true;
-                    PlayButton.Visible = true;
+                    BottomPanel.Enabled = true;
                     PlayButton.PerformClick();
                     DoNotPerformAutomaticClose = true;
                 }
@@ -121,8 +202,7 @@ namespace PatcherPlus.Loader
             {
                 TitleText.Text = "Launch failed.";
                 TitleText.ForeColor = Color.Maroon;
-                PlayButton.Enabled = true;
-                PlayButton.Visible = true;
+                BottomPanel.Enabled = true;
 
                 Log.WriteLog("osu! wasn't able to be patched properly.");
 
@@ -151,13 +231,12 @@ namespace PatcherPlus.Loader
             //    PatcherPlus.Loader.Config.Save(Config);
             //}
 
-            if (LoaderHub.PatchingInProgress)
+            if (PatchingInProgress)
             {
             }
             else
             {
-                PlayButton.Enabled = true;
-                PlayButton.Visible = true;
+                //BottomPanel.Enabled = true;
             }
 
             //if (Settings.Default.ShowPath) OsuLocationText.Text = $"Using: {path} | Incorrect? Open the game, or click \"Change File Path\".";
@@ -185,21 +264,24 @@ namespace PatcherPlus.Loader
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (LoaderHub.PatchingInProgress)
+            if (PatchingInProgress)
             {
                 SystemSounds.Asterisk.Play();
-                e.Cancel = true;
+                DialogResult question = MessageBox.Show("Closing while patching may cause problems.\r\nAre you sure you want to close PatcherPlus?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (question != DialogResult.Yes) e.Cancel = true;
             }
             else
             {
                 BackgroundThreads.Stop();
+                Settings.Default.LastServer = CurrentServer.ToString();
+                Settings.Default.LastBranch = CurrentStream;
             }
             Settings.Default.Save();
         }
 
         private void ChangeButton_Click(object sender, EventArgs e)
         {
-            if (!PlayButton.Enabled)
+            if (PatchingInProgress)
             {
                 MessageBox.Show("You cannot change the file path right now.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -229,6 +311,7 @@ namespace PatcherPlus.Loader
             {
                 if (Settings.Default.AutoPatch)
                 {
+                    Log.WriteLog($"Auto patching is enabled. Patching will attempt to begin automatically.");
                     StartedWithAutoPatching = true;
                     PlayButton.PerformClick();
                 }
@@ -250,35 +333,18 @@ namespace PatcherPlus.Loader
 
         private void CheckButton_Tick(object sender, EventArgs e)
         {
-            bool Visibility = PlayButton.Visible && PlayButton.Enabled;
+            //bool Visibility = PlayButton.Visible && PlayButton.Enabled;
+            //bool Visibility = BottomPanel.Visible && BottomPanel.Enabled;
 
-            ChangeButton.Visible = Visibility;
-            AutoPatchBox.Visible = Visibility;
-            ShowPathBox.Visible = Visibility;
-            OsuLocationText.Enabled = Visibility;
+            //ChangeButton.Visible = Visibility;
+            //AutoPatchBox.Visible = Visibility;
+            //ShowMoreButton.Visible = Visibility;
+            //OsuLocationText.Enabled = Visibility;
         }
 
         private void ShowPathBox_CheckedChanged(object sender, EventArgs e)
         {
             if (IgnoreChanges) return;
-
-            Settings.Default.ShowPath = ShowPathBox.Checked;
-
-            if (Settings.Default.ShowPath)
-            {
-                OsuLocationText.Visible = true;
-                AnimateLogo(86);
-            }
-            else
-            {
-                OsuLocationText.Visible = false;
-                AnimateLogo(148);
-            }
-
-            if (ShowPathBox.Checked)
-            {
-                //MessageBox.Show("PatcherPlus will replace the generic found osu! text with file path information next time changes are made.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         private void InfoText_Click(object sender, EventArgs e)
@@ -309,7 +375,13 @@ namespace PatcherPlus.Loader
 
         private void BannerMessageText_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("osu!(lazer) is NOT the same as osu!(stable/cuttingedge). It is a complete rewrite of the game, and thus, does not have the exact same code that can be patched. Consider visiting  https://osu.ppy.sh/wiki/en/Client/Release_stream/Lazer  for a little more information.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // osu!(lazer) is NOT the same as osu!(stable/cuttingedge). It is a complete rewrite of the game, and thus, does not have the exact same code that can be patched. Consider visiting  https://osu.ppy.sh/wiki/en/Client/Release_stream/Lazer  for a little more information.
+            MessageBox.Show("PatcherPlus works by sideloading data into osu!.\r\n\r\n" +
+                "When you click \"Play\", PatcherPlus first starts a download.\r\n" +
+                "That download contains a (.)DLL file with code that will be sideloaded into the game. No download will happen if a cached version of it is saved.\r\n\r\n" +
+                "Many servers use sideloading to add features, such as adding a performance points counter, or changing how the Relax mod works to reveal misses.\r\n\r\n" +
+                "After the download is done, osu! is started, and the (.)DLL file is sideloaded into the game.\r\n\r\n" +
+                "After that, PatcherPlus is done!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BannerMessageBox_MouseEnter(object sender, EventArgs e)
@@ -325,27 +397,55 @@ namespace PatcherPlus.Loader
         private void BannerMessageText_MouseEnter(object sender, EventArgs e)
         {
             BannerMessageText.ForeColor = Color.Silver;
-            BannerMessageText.Text = "Click here to know why it isn't compatible.";
+            //BannerMessageText.Text = "Click here to know why it isn't compatible.";
         }
 
         private void BannerMessageText_MouseLeave(object sender, EventArgs e)
         {
             BannerMessageText.ForeColor = Color.Gray;
-            BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
+            //BannerMessageText.Text = "This tool is not compatible with osu!(lazer).";
         }
-
-        private int TargetHeight = 32;
-        private const double EaseFactor = 0.12;
-        private const int StopThreshold = 1;
 
         private void LogoBox_MouseEnter(object sender, EventArgs e)
         {
             //AnimateLogo(78);
+            if (CurrentServer == Server.Unknown)
+            {
+                LogoBox.Image = Resources.NoServerSelectedHover;
+            }
+            else
+            {
+                LogoBox.BackColor = Color.FromArgb(40, 40, 40);
+            }
         }
 
         private void LogoBox_MouseLeave(object sender, EventArgs e)
         {
             //AnimateLogo(148);
+            if (CurrentServer == Server.Unknown)
+            {
+                LogoBox.Image = Resources.NoServerSelected;
+            }
+            else
+            {
+                LogoBox.BackColor = Color.FromArgb(16, 16, 16);
+            }
+        }
+
+        private void LogoBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (CurrentServer != Server.Unknown)
+            {
+                LogoBox.BackColor = Color.FromArgb(60, 60, 60);
+            }
+        }
+
+        private void LogoBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (CurrentServer != Server.Unknown)
+            {
+                LogoBox.BackColor = Color.FromArgb(40, 40, 40);
+            }
         }
 
         private void AnimateLogo(int targetHeight)
@@ -361,6 +461,10 @@ namespace PatcherPlus.Loader
             }
         }
 
+        private int TargetHeight = 32;
+        private const double EaseFactor = 0.12;
+        private const int StopThreshold = 1;
+
         private void LogoAnimation_Tick(object sender, EventArgs e)
         {
             if (Opacity < 0.25) return;
@@ -373,19 +477,21 @@ namespace PatcherPlus.Loader
                 LogoBox.Height = TargetHeight;
                 LogoAnimation.Enabled = false;
 
-                if (OsuLocationText.ForeColor == Color.Orange)
-                {
-                    AnimateLogo(86);
-                }
-                else
-                {
-                    if (!ShowPathBox.Checked) AnimateLogo(148);
-                }
+                //if (OsuLocationText.ForeColor == Color.Orange)
+                //{
+                //    AnimateLogo(86);
+                //}
+                //else
+                //{
+                //    if (!ShowMore) AnimateLogo(148);
+                //}
 
                 return;
             }
 
             int step = (int)Math.Ceiling(delta * EaseFactor);
+
+            if (step == 0) step = -1;
             LogoBox.Height += step;
         }
 
@@ -405,12 +511,67 @@ namespace PatcherPlus.Loader
                 return;
             }
 
-            MessageBox.Show("You'll be connecting to \"Akatsuki\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            switch (CurrentServer)
+            {
+                default:
+                case Server.Unknown:
+                case Server.Realistik:
+                    CurrentServer = Server.Akatsuki;
+                    LogoBox.Image = Resources.AkatsukiLogoLowRes;
+                    break;
+                case Server.Akatsuki:
+                    CurrentServer = Server.Realistik;
+                    LogoBox.Image = Resources.RealistikOsuLogo;
+                    break;
+            }
+
+            //MessageBox.Show($"Switched to \"{CurrentServer}\".", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            //MessageBox.Show($"You'll be connecting to \"{server}\".\r\nDouble-click the same area to switch servers.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void PlayButton_Click(object sender, EventArgs e)
+        private void LogoBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            LogoBox_MouseClick(sender, e);
+        }
 
+        private void EnableOsuCoinsBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (EnableOsuCoinsBox.Checked)
+            {
+                MessageBox.Show("You will gain and lose coins while you play.\r\n\r\n" +
+                    "- Playing any ranked map costs 1 coin.\r\n" +
+                    "- Gaining 100 combo awards 1 coin (200 combo with Relax/Autopilot).\r\n" +
+                    "- Passing a ranked map awards 1 coin.\r\n\r\n" +
+                    "You can change coin settings in osu! options.",
+                    Text,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+        }
+
+        private void ShowMoreButton_Click(object sender, EventArgs e)
+        {
+            ShowMore = !ShowMore;
+            Settings.Default.ShowPath = ShowMore;
+
+            if (ShowMore)
+            {
+                OsuLocationText.Visible = true;
+                AnimateLogo(96);
+            }
+            else
+            {
+                OsuLocationText.Visible = false;
+                AnimateLogo(148);
+            }
+        }
+
+        private void TitleText_Click(object sender, EventArgs e)
+        {
+            Settings.Default.Reset();
+            Settings.Default.Save();
+            Environment.Exit(0);
         }
     }
 }

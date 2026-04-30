@@ -12,13 +12,13 @@ namespace PatcherPlus.Loader
         public static string OsuExecutablePath = string.Empty;
         public static MainForm main;
         public static bool Closing = false;
-        public static readonly int VersionMajor = 1;
+        public static readonly int VersionMajor = 2;
         public static readonly int VersionMinor = 0;
 
         [STAThread]
         static void Main()
         {
-            Mutex mutex = new Mutex(false, "AKATSUKI_PATCHER_PLUS_INSANITY");
+            Mutex mutex = new Mutex(false, "PATCHER_PLUS_INSANITY");
 
             if (!mutex.WaitOne(0, false))
             {

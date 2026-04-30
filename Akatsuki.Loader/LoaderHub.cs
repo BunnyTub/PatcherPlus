@@ -49,6 +49,45 @@ namespace PatcherPlus.Loader
         const uint SWP_NOACTIVATE = 0x0010;
         const uint SWP_SHOWWINDOW = 0x0040;
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        const uint SWP_NOZORDER = 0x0004;
+
+        private readonly static Random rnd = new Random();
+
+        public static bool NudgeWindow(string title)
+        {
+            IntPtr hWnd = FindWindow(null, title);
+            if (hWnd == IntPtr.Zero) return false;
+
+            if (!GetWindowRect(hWnd, out RECT rect)) return false;
+
+            int x = rect.Left;
+            int y = rect.Top;
+
+            int direction = rnd.Next(4);
+
+            switch (direction)
+            {
+                case 0: x += 5; break;
+                case 1: x -= 5; break;
+                case 2: y += 5; break;
+                case 3: y -= 5; break;
+            }
+
+            return SetWindowPos(hWnd, IntPtr.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+        }
+
         public static bool HideWindow(string title, bool hide)
         {
             IntPtr hWnd = FindWindow(null, title);
@@ -74,11 +113,26 @@ namespace PatcherPlus.Loader
 
         public static bool PatchedSuccessfully { get; private set; } = false;
 
-        private static void PatcherResponse(byte[] data, string filename)
+        private static void PatcherResponse(Server server, byte[] data, string filename)
         {
             try
             {
-                Process process = Injector.Inject(Program.OsuExecutablePath, data, filename);
+                string type = string.Empty;
+                string method = string.Empty;
+
+                switch (server)
+                {
+                    case Server.Akatsuki:
+                        type = "Akatsuki.Patcher.Main";
+                        method = "Initialize";
+                        break;
+                    case Server.Realistik:
+                        type = "RealistikOsu.Patcher.Main";
+                        method = "Inject";
+                        break;
+                }
+
+                Process process = Injector.Inject(server, Program.OsuExecutablePath, data, filename, type, method);
 
                 if (process != null)
                 {
@@ -86,17 +140,25 @@ namespace PatcherPlus.Loader
                     PatchedSuccessfully = true;
 
                     // this is just stylization fun, it's not needed, and I might end up removing it
-                    HideWindow("osu! (loading)", true);
 
                     new Thread(() =>
                     {
-                        StartupForm startup = new StartupForm(Resources.PatchLogo);
-                        startup.ShowDialog();
-                        startup.BringToFront();
-                        startup.Dispose();
-                        Thread.Sleep(2000);
-                        ForwardWindow("osu!");
+                        for (int i = 0; i <= 300; i++)
+                        {
+                            NudgeWindow("osu! (loading)");
+                            Thread.Sleep(30);
+                        }
                     }).Start();
+
+                    //new Thread(() =>
+                    //{
+                    //    StartupForm startup = new StartupForm(Resources.PatchLogo);
+                    //    startup.ShowDialog();
+                    //    startup.BringToFront();
+                    //    startup.Dispose();
+                    //    Thread.Sleep(2000);
+                    //    ForwardWindow("osu!");
+                    //}).Start();
 
                     Program.main.Invoke((MethodInvoker)delegate
                     {
@@ -147,10 +209,8 @@ namespace PatcherPlus.Loader
             //}
         }
 
-        public static void PatcherRequest(string releaseStream)
+        public static void PatcherRequest(Server server, string releaseStream)
         {
-            PatchingInProgress = true;
-
             BackgroundThreads.Stop();
 
             try
@@ -202,18 +262,84 @@ namespace PatcherPlus.Loader
                 Program.main.TitleText.ForeColor = Color.Gray;
             });
 
-            var data = GetPatch(releaseStream);
+            var data = GetPatch(server, releaseStream);
 
-            PatcherResponse(data.data, data.filename);
+            string require = Path.GetDirectoryName(Program.OsuExecutablePath) + "\\.require_update";
+            string pending = Path.GetDirectoryName(Program.OsuExecutablePath) + "\\_pending";
+
+            if (File.Exists(require) || Directory.Exists(pending))
+            {
+                DialogResult question = DialogResult.No;
+
+                Program.main.Invoke((MethodInvoker)delegate
+                {
+                    Program.main.TitleText.Text = "Patching paused.";
+                    Program.main.TitleText.ForeColor = Color.Yellow;
+                    question = MessageBox.Show("PatcherPlus found that osu! needs need to update or repair itself. Do you want to try bypassing this and continue?", Program.main.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                });
+
+                if (question != DialogResult.Yes)
+                {
+                    Program.main.Invoke((MethodInvoker)delegate
+                    {
+                        Program.main.TitleText.Text = "Patching stopped.";
+                        Program.main.TitleText.ForeColor = Color.Yellow;
+                    });
+
+                    PatchingInProgress = false;
+                    return;
+                }
+
+                if (File.Exists(require)) File.Delete(require);
+                if (Directory.Exists(pending)) Directory.Delete(pending, true);
+            }
+
+            PatcherResponse(server, data.data, data.filename);
 
             PatchingInProgress = false;
         }
 
-        public static bool PatchingInProgress { get; private set; } = false;
-
-        private static (byte[] data, string filename) GetPatch(string branch)
+        public enum Server
         {
-            var URL = $"https://air_conditioning.akatsuki.gg/patcher/patcher-version?branch={branch}";
+            Unknown = 0,
+            Akatsuki = 1,
+            Realistik = 2
+        }
+
+        private static bool _PatchingInProgress = false;
+        public static bool PatchingInProgress
+        {
+            get
+            {
+                return _PatchingInProgress;
+            }
+            set
+            {
+                _PatchingInProgress = value;
+                Program.main.Invoke((MethodInvoker)delegate
+                {
+                    Program.main.BottomPanel.Enabled = !value;
+                    if (value) Program.main.BackgroundProgressBar.BringToFront();
+                    else Program.main.BackgroundProgressBar.SendToBack();
+                });
+            }
+        }
+
+        private static (byte[] data, string filename) GetPatch(Server server, string branch)
+        {
+            string URL = string.Empty;
+            
+            switch (server)
+            {
+                case Server.Akatsuki:
+                    URL = $"https://air_conditioning.akatsuki.gg/patcher/patcher-version?branch={branch}";
+                    break;
+                case Server.Realistik:
+                    URL = $"https://ussr.pl/api/v1/patcher/branches/{branch}/patcher/file";
+                    break;
+                default:
+                    return (null, null);
+            }
 
             byte[] data = null;
 
@@ -257,9 +383,12 @@ namespace PatcherPlus.Loader
                     byte[] bytes = File.ReadAllBytes(fullPath);
                     string tricks = _Trickery.Learn(bytes);
 
-                    if (tricks != Settings.Default.KnownTrickery)
+                    if (tricks != Settings.Default.KnownTrickery ||
+                        server.ToString().ToLowerInvariant() != Settings.Default.LastServer.ToLowerInvariant() ||
+                        branch.ToLowerInvariant() != Settings.Default.LastBranch.ToLowerInvariant())
                     {
-                        Log.WriteLog($"Cache mismatch, the file will be deleted. ({tricks} != {Settings.Default.KnownTrickery})");
+                        //Log.WriteLog($"Cache mismatch, the file will be deleted.");
+                        Log.WriteLog($"Cache deletion reason or reasons: {tricks} != {Settings.Default.KnownTrickery} / {server.ToString().ToLowerInvariant()} != {Settings.Default.LastServer.ToLowerInvariant()} / {branch.ToLowerInvariant()} != {Settings.Default.LastBranch.ToLowerInvariant()}");
 
                         Program.main.Invoke((MethodInvoker)delegate
                         {
