@@ -93,6 +93,26 @@ namespace PatcherPlus.Loader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NoServerSelected {
+            get {
+                object obj = ResourceManager.GetObject("NoServerSelected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NoServerSelectedHover {
+            get {
+                object obj = ResourceManager.GetObject("NoServerSelectedHover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap NotByAkatsuki {
             get {
                 object obj = ResourceManager.GetObject("NotByAkatsuki", resourceCulture);

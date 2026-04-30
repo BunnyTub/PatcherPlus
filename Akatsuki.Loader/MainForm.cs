@@ -145,6 +145,7 @@ namespace PatcherPlus.Loader
                 RevealServerOptions();
             }
         }
+
         private string CurrentStream = "stable";
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -408,23 +409,43 @@ namespace PatcherPlus.Loader
         private void LogoBox_MouseEnter(object sender, EventArgs e)
         {
             //AnimateLogo(78);
-            LogoBox.BackColor = Color.FromArgb(40, 40, 40);
+            if (CurrentServer == Server.Unknown)
+            {
+                LogoBox.Image = Resources.NoServerSelectedHover;
+            }
+            else
+            {
+                LogoBox.BackColor = Color.FromArgb(40, 40, 40);
+            }
         }
 
         private void LogoBox_MouseLeave(object sender, EventArgs e)
         {
             //AnimateLogo(148);
-            LogoBox.BackColor = Color.FromArgb(16, 16, 16);
+            if (CurrentServer == Server.Unknown)
+            {
+                LogoBox.Image = Resources.NoServerSelected;
+            }
+            else
+            {
+                LogoBox.BackColor = Color.FromArgb(16, 16, 16);
+            }
         }
 
         private void LogoBox_MouseDown(object sender, MouseEventArgs e)
         {
-            LogoBox.BackColor = Color.FromArgb(60, 60, 60);
+            if (CurrentServer != Server.Unknown)
+            {
+                LogoBox.BackColor = Color.FromArgb(60, 60, 60);
+            }
         }
 
         private void LogoBox_MouseUp(object sender, MouseEventArgs e)
         {
-            LogoBox.BackColor = Color.FromArgb(40, 40, 40);
+            if (CurrentServer != Server.Unknown)
+            {
+                LogoBox.BackColor = Color.FromArgb(40, 40, 40);
+            }
         }
 
         private void AnimateLogo(int targetHeight)
@@ -514,10 +535,6 @@ namespace PatcherPlus.Loader
             LogoBox_MouseClick(sender, e);
         }
 
-        private void TitleText_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-        }
-
         private void EnableOsuCoinsBox_CheckedChanged(object sender, EventArgs e)
         {
             if (EnableOsuCoinsBox.Checked)
@@ -548,6 +565,13 @@ namespace PatcherPlus.Loader
                 OsuLocationText.Visible = false;
                 AnimateLogo(148);
             }
+        }
+
+        private void TitleText_Click(object sender, EventArgs e)
+        {
+            Settings.Default.Reset();
+            Settings.Default.Save();
+            Environment.Exit(0);
         }
     }
 }

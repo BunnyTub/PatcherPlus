@@ -51,9 +51,9 @@
             this.SpacerPanel = new System.Windows.Forms.Panel();
             this.FadeInAnimation = new System.Windows.Forms.Timer(this.components);
             this.LogoAnimation = new System.Windows.Forms.Timer(this.components);
+            this.OsuServerText = new System.Windows.Forms.Label();
             this.LogoBox = new System.Windows.Forms.PictureBox();
             this.TitleText = new System.Windows.Forms.Label();
-            this.OsuServerText = new System.Windows.Forms.Label();
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BannerMessageBox)).BeginInit();
             this.ServerOptionsPanel.SuspendLayout();
@@ -293,10 +293,22 @@
             this.LogoAnimation.Interval = 15;
             this.LogoAnimation.Tick += new System.EventHandler(this.LogoAnimation_Tick);
             // 
+            // OsuServerText
+            // 
+            this.OsuServerText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.OsuServerText.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.OsuServerText.ForeColor = System.Drawing.Color.White;
+            this.OsuServerText.Location = new System.Drawing.Point(0, 64);
+            this.OsuServerText.Name = "OsuServerText";
+            this.OsuServerText.Size = new System.Drawing.Size(464, 26);
+            this.OsuServerText.TabIndex = 12;
+            this.OsuServerText.Text = "Welcome to PatcherPlus!";
+            this.OsuServerText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // LogoBox
             // 
             this.LogoBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.bunnyblep;
+            this.LogoBox.Image = global::PatcherPlus.Loader.Properties.Resources.NoServerSelected;
             this.LogoBox.Location = new System.Drawing.Point(0, 90);
             this.LogoBox.Name = "LogoBox";
             this.LogoBox.Size = new System.Drawing.Size(464, 96);
@@ -325,19 +337,7 @@
             this.TitleText.TabIndex = 1;
             this.TitleText.Text = "Ready to play?";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.TitleText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TitleText_MouseDoubleClick);
-            // 
-            // OsuServerText
-            // 
-            this.OsuServerText.Dock = System.Windows.Forms.DockStyle.Top;
-            this.OsuServerText.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.OsuServerText.ForeColor = System.Drawing.Color.White;
-            this.OsuServerText.Location = new System.Drawing.Point(0, 64);
-            this.OsuServerText.Name = "OsuServerText";
-            this.OsuServerText.Size = new System.Drawing.Size(464, 26);
-            this.OsuServerText.TabIndex = 12;
-            this.OsuServerText.Text = "Akatsuki";
-            this.OsuServerText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.TitleText.Click += new System.EventHandler(this.TitleText_Click);
             // 
             // MainForm
             // 

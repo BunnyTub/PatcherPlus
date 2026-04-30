@@ -6,7 +6,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{060C01EE-6621-424E-9D7B-4C1DC8C009C9}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>PatcherPlus.Loader</RootNamespace>
     <AssemblyName>PatcherPlus</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
